@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\iti\\blazor\\day 3\\project\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj": {}
+    "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj": {}
   },
   "projects": {
-    "E:\\iti\\blazor\\day 3\\project\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj": {
+    "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\iti\\blazor\\day 3\\project\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj",
+        "projectUniqueName": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj",
         "projectName": "ITI-Blazor-Project",
-        "projectPath": "E:\\iti\\blazor\\day 3\\project\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj",
-        "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-        "outputPath": "E:\\iti\\blazor\\day 3\\project\\ITI-Blazor-Project\\ITI-Blazor-Project\\obj\\",
+        "projectPath": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\ITI-Blazor-Project.csproj",
+        "packagesPath": "C:\\Users\\AlBadr\\.nuget\\packages\\",
+        "outputPath": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\AlBadr\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -70,11 +70,13 @@
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.16, )"
+              "version": "[9.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.16, )"
+              "version": "[9.0.5, )"
             },
             "MudBlazor": {
               "target": "Package",

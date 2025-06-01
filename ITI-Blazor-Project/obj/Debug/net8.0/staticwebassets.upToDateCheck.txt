@@ -1,4 +1,4 @@
-wwwroot\app.css
+wwwroot\app.custom.css
 wwwroot\bootstrap\bootstrap.min.css
 wwwroot\bootstrap\bootstrap.min.css.map
 wwwroot\favicon.png
