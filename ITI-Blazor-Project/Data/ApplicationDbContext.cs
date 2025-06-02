@@ -82,20 +82,21 @@ namespace ITI_Blazor_Project.Data
                 .HasOne(a => a.StudentExam)
                 .WithMany(se => se.Answers)
                 .HasForeignKey(a => a.StudentExamId)
+                .HasPrincipalKey(s => s.Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
 
             builder.Entity<Answer>()
                 .HasOne(a => a.Question)
-                .WithOne(q =>  q.Answer)
+                .WithOne(q => q.Answer)
                 .HasForeignKey<Answer>(a => a.QuestionId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Answer>()
                 .HasOne(a => a.Choice)
                 .WithOne(c => c.Answer)
                 .HasForeignKey<Answer>(a => a.ChoiceId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Student>()
                 .HasOne(s => s.Instructor)
