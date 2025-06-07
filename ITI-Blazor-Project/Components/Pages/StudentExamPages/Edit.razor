@@ -1,0 +1,99 @@
+﻿@page "/studentexams/edit"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>StudentExam</h2>
+<hr />
+@if (StudentExam is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @* <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="StudentExam" OnValidSubmit="UpdateStudentExam" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="StudentExam.StudentId" value="@StudentExam.StudentId" />
+                <div class="mb-3">
+                    <label for="id" class="form-label">Id:</label>
+                    <InputText id="id" @bind-Value="StudentExam.Id" class="form-control" />
+                    <ValidationMessage For="() => StudentExam.Id" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="assignedat" class="form-label">AssignedAt:</label>
+                    <InputDate id="assignedat" @bind-Value="StudentExam.AssignedAt" class="form-control" />
+                    <ValidationMessage For="() => StudentExam.AssignedAt" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="submittedat" class="form-label">SubmittedAt:</label>
+                    <InputDate id="submittedat" @bind-Value="StudentExam.SubmittedAt" class="form-control" />
+                    <ValidationMessage For="() => StudentExam.SubmittedAt" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div> *@
+}
+
+<div>
+    <a href="/studentexams">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid? StudentId { get; set; }
+
+    [SupplyParameterFromForm]
+    private StudentExam? StudentExam { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        StudentExam ??= await context.StudentExams.FirstOrDefaultAsync(m => m.StudentId == StudentId);
+
+        if (StudentExam is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateStudentExam()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(StudentExam!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!StudentExamExists(StudentExam!.StudentId))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/studentexams");
+    }
+
+    private bool StudentExamExists(Guid? studentid)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.StudentExams.Any(e => e.StudentId == studentid);
+    }
+}

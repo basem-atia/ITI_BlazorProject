@@ -6,14 +6,14 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar>
+    <MudAppBar Class="mb-8">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         My Application
     </MudAppBar>
-    <MudDrawer Class="pa-4 mud-theme-primary" @bind-Open="@_drawerOpen">
+    <MudDrawer Class="pa-4 ps-0 mud-theme-primary" @bind-Open="@_drawerOpen">
         <NavMenu/>
     </MudDrawer>
-    <MudMainContent>
+    <MudMainContent Class="ps-9">
         @Body
     </MudMainContent>
 </MudLayout>

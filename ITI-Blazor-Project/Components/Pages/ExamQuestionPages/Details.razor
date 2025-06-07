@@ -1,0 +1,44 @@
+﻿@page "/examquestions/details"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>ExamQuestion</h2>
+    <hr />
+    @if (examquestion is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+        </dl>
+        <div>
+            <a href="@($"/examquestions/edit?examid={examquestion.ExamId}")">Edit</a> |
+            <a href="@($"/examquestions")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private ExamQuestion? examquestion;
+
+    [SupplyParameterFromQuery]
+    private Guid ExamId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        examquestion = await context.ExamQuestions.FirstOrDefaultAsync(m => m.ExamId == ExamId);
+
+        if (examquestion is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

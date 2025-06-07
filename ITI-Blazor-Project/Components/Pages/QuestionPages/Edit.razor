@@ -1,0 +1,113 @@
+﻿@page "/questions/edit"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+<h2>Question</h2>
+<hr />
+
+@if (Question is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="Question" OnValidSubmit="UpdateQuestion">
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert" />
+
+                <div class="mb-3">
+                    <label for="text" class="form-label">Text:</label>
+                    <InputText id="text" @bind-Value="Question.Text" class="form-control" />
+                    <ValidationMessage For="() => Question.Text" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="courseid" class="form-label">Course ID (GUID):</label>
+                    <InputText id="courseid" @bind-Value="CourseIdString" class="form-control" />
+                    <ValidationMessage For="() => CourseIdString" class="text-danger" />
+                </div>
+
+                @if (!IsCourseIdValid)
+                {
+                    <div class="text-danger mb-3">Course ID must be a valid GUID.</div>
+                }
+
+                <button type="submit" class="btn btn-primary" disabled="@( !IsCourseIdValid )">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/questions">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+
+    private Question? Question { get; set; }
+    private string CourseIdString { get; set; } = string.Empty;
+    private bool IsCourseIdValid { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Question = await context.Questions.FirstOrDefaultAsync(q => q.Id == Id);
+
+        if (Question is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
+        CourseIdString = Question.CourseId.ToString();
+    }
+
+    private async Task UpdateQuestion()
+    {
+        if (!Guid.TryParse(CourseIdString, out var parsedCourseId))
+        {
+            IsCourseIdValid = false;
+            return;
+        }
+
+        IsCourseIdValid = true;
+        Question!.CourseId = parsedCourseId;
+
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Question).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!QuestionExists(Question.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+                return;
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/questions");
+    }
+
+    private bool QuestionExists(Guid id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Questions.Any(e => e.Id == id);
+    }
+}

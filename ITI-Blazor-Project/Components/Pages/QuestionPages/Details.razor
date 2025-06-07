@@ -1,0 +1,58 @@
+﻿@page "/questions/details"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Question</h2>
+    <hr />
+    @if (Question is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <dl class="row">
+            <dt class="col-sm-2">Text</dt>
+            <dd class="col-sm-10">@Question.Text</dd>
+
+            <dt class="col-sm-2">Course</dt>
+            <dd class="col-sm-10">@Question.Course?.Title (@Question.CourseId)</dd>
+        </dl>
+        <div>
+            <a href="@($"/questions/edit?id={Question.Id}")">Edit</a> |
+            <a href="/questions">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Question? Question;
+
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == Guid.Empty)
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
+        using var context = DbFactory.CreateDbContext();
+        Question = await context.Questions
+            .Include(q => q.Course) 
+            .FirstOrDefaultAsync(q => q.Id == Id);
+
+        if (Question is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

@@ -1,0 +1,153 @@
+﻿@page "/exams/edit"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1 class="pt-5 pb-5">Edit Exam</h1>
+
+<hr />
+@if (Exam is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Exam" OnValidSubmit="UpdateExam" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Exam.Id" value="@Exam.Id" />
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" @bind-Value="Exam.Title" class="form-control" />
+                    <ValidationMessage For="() => Exam.Title" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date:</label>
+                    <InputDate id="date" @bind-Value="Exam.Date" class="form-control" />
+                    <ValidationMessage For="() => Exam.Date" class="text-danger" />
+                </div>
+                
+                <div class="mb-3">
+                    <label for="duration" class="form-label">Duration (hh:mm):</label>
+                    <InputText id="duration" @bind-Value="DurationString" class="form-control" />
+                    <ValidationMessage For="() => DurationString" class="text-danger" />
+                    @if (!string.IsNullOrEmpty(DurationError))
+                    {
+                        <div class="text-danger">@DurationError</div>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <label for="instructorid" class="form-label">instructorid:</label>
+                    @* <InputText id="questionid" @bind-Value="QuestionIdString" class="form-control" />  *@
+                    @* <InputSelect id="instructorid" @bind-Value="Exam.InstructorId">
+                        <option disabled value="@Exam.InstructorId">@Exam.Instructor?.Name</option>
+                        @foreach (var instructor in Instructors)
+                        {
+                            @if (instructor.Id != Exam.InstructorId)
+                            {
+                                <option value="@instructor.Id">@instructor.Name</option>
+                            }
+                        }
+                    </InputSelect> *@
+                    <InputSelect id="instructorid" @bind-Value="Exam.InstructorId" class="form-select">
+                        @foreach (var instructor in Instructors)
+                        {
+                            <option value="@instructor.Id">@instructor.Name</option>
+                        }
+                    </InputSelect>
+
+                    <ValidationMessage For="() => Exam.InstructorId" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/exams">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Exam? Exam { get; set; }
+    private string DurationString
+    {
+        get => Exam.Duration.ToString(@"hh\:mm"); 
+        set
+        {
+            if (TimeSpan.TryParse(value, out var result))
+            {
+                Exam.Duration = result;
+            }
+            else
+            {
+                DurationError = "Please enter duration in HH:mm format, like 1:30.";
+            }
+        }
+    }
+    private string? DurationError { get; set; }
+    private List<Instructor> Instructors = new List<Instructor>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Instructors = await context.Instructors.ToListAsync();
+        Exam ??= await context.Exams.Include(e=>e.Instructor).FirstOrDefaultAsync(m => m.Id == Id);
+        if (Exam is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private async Task UpdateExam()
+    {
+        if (!string.IsNullOrEmpty(DurationError))
+            return;
+        using var context = DbFactory.CreateDbContext();
+        // context.Attach(Exam!).State = EntityState.Modified;
+        // context.Entry(Exam!).CurrentValues.SetValues(Exam!);
+
+        var dbExam = await context.Exams.Include(e=>e.Instructor).FirstOrDefaultAsync(e => e.Id == Exam!.Id);
+        if (dbExam is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
+        context.Entry(dbExam).CurrentValues.SetValues(Exam!);
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ExamExists(Exam!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/exams");
+    }
+
+    private bool ExamExists(Guid id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Exams.Any(e => e.Id == id);
+    }
+}

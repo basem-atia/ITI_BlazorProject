@@ -1,0 +1,54 @@
+﻿@page "/studentexams/create"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>StudentExam</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @* <EditForm method="post" Model="StudentExam" OnValidSubmit="AddStudentExam" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="id" class="form-label">Id:</label> 
+                <InputText id="id" @bind-Value="StudentExam.Id" class="form-control" /> 
+                <ValidationMessage For="() => StudentExam.Id" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="assignedat" class="form-label">AssignedAt:</label> 
+                <InputDate id="assignedat" @bind-Value="StudentExam.AssignedAt" class="form-control" /> 
+                <ValidationMessage For="() => StudentExam.AssignedAt" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="submittedat" class="form-label">SubmittedAt:</label> 
+                <InputDate id="submittedat" @bind-Value="StudentExam.SubmittedAt" class="form-control" /> 
+                <ValidationMessage For="() => StudentExam.SubmittedAt" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm> *@
+    </div>
+</div>
+
+<div>
+    <a href="/studentexams">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private StudentExam StudentExam { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddStudentExam()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.StudentExams.Add(StudentExam);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/studentexams");
+    }
+}

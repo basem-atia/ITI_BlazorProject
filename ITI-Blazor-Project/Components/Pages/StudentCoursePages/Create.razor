@@ -1,0 +1,80 @@
+﻿@page "/studentcourses/create"
+@using ITI_Blazor_Project.Data
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>StudentCourse</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="StudentCourse" OnValidSubmit="AddStudentCourse" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <label class="form-label" for="studid">Student Name :</label>
+            <InputSelect class="form-select" id="studid" @bind-Value="StudentCourse.StudentId">
+                @if (Students.Any()== true)
+                {
+                    <option value="@Guid.Empty">-- Select Student --</option>
+                    @foreach (var student in Students)
+                    {
+                        <option value="@student.Id">@student.Name</option>
+                    }
+                }
+                else
+                {
+                    <p> No Students To Display </p>
+                }
+            </InputSelect>
+            <ValidationMessage For="()=>StudentCourse.StudentId" class="text-danger"></ValidationMessage>
+            <label class="form-label" for="crsid">Course Name :</label>
+            <InputSelect class="form-select" id="crsid" @bind-Value="StudentCourse.CourseId">
+                @if (Students.Any() == true)
+                {
+                    <option value="@Guid.Empty">-- Select Course --</option>
+                    @foreach (var course in Courses)
+                    {
+                        <option value="@course.Id">@course.Title</option>
+                    }
+                }
+                else
+                {
+                    <p> No Courses To Display </p>
+                }
+            </InputSelect>
+            <ValidationMessage For="() => StudentCourse.CourseId" class="text-danger"></ValidationMessage>
+            <button type="submit" class="btn btn-primary m-2">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/studentcourses">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private StudentCourse StudentCourse { get; set; } = new();
+    private ApplicationDbContext Context = default!;
+    private List<Student> Students = new List<Student>();
+    private List<Course> Courses = new List<Course>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Context = DbFactory.CreateDbContext();
+        Students = await Context.Students.ToListAsync();
+        Courses = await Context.Courses.ToListAsync();
+    }
+    private async Task AddStudentCourse()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.StudentCourses.Add(StudentCourse);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/studentcourses");
+    }
+}

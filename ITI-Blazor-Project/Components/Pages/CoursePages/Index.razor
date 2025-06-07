@@ -1,0 +1,61 @@
+﻿@page "/courses"  
+@using Microsoft.EntityFrameworkCore  
+@using ITI_Blazor_Project  
+@using ITI_Blazor_Project.Data  
+@implements IAsyncDisposable  
+@inject IDbContextFactory<ApplicationDbContext> DbFactory  
+
+<PageTitle>Courses</PageTitle>  
+
+<h1>Courses</h1>  
+
+<p>
+    <a class="btn btn-primary" href="/courses/create">Create New</a>
+    <a class="btn btn-secondary ms-2" href="/questions">Go to Questions</a>
+</p>
+
+@if (Courses is null)  
+{  
+    <p><em>Loading...</em></p>  
+}  
+else  
+{  
+    <table class="table table-striped">  
+        <thead>  
+            <tr>  
+                <th>Title</th>  
+                <th>Description</th>  
+                <th>Instructor ID</th>  
+                <th>Actions</th>  
+            </tr>  
+        </thead>  
+        <tbody>  
+            @foreach (var course in Courses)  
+            {  
+                <tr>  
+                    <td>@course.Title</td>  
+                    <td>@course.Description</td>  
+                    <td>@course.InstructorId</td>  
+                    <td>  
+                        <a href="@($"/courses/edit?id={course.Id}")">Edit</a> |  
+                        <a href="@($"/courses/details?id={course.Id}")">Details</a> |  
+                        <a href="@($"/courses/delete?id={course.Id}")">Delete</a>  
+                    </td>  
+                </tr>  
+            }  
+        </tbody>  
+    </table>  
+}  
+
+@code {  
+    private ApplicationDbContext context = default!;  
+    private List<Course>? Courses;  
+
+    protected override async Task OnInitializedAsync()  
+    {  
+        context = DbFactory.CreateDbContext();  
+        Courses = await context.Courses.ToListAsync();  
+    }  
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();  
+}

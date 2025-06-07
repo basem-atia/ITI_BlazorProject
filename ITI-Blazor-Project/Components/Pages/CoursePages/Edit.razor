@@ -1,0 +1,119 @@
+﻿@page "/courses/edit"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+<h2>Course</h2>
+<hr />
+
+@if (Course is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="Course" OnValidSubmit="UpdateCourse">
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert" />
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" @bind-Value="Course.Title" class="form-control" />
+                    <ValidationMessage For="() => Course.Title" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <InputText id="description" @bind-Value="Course.Description" class="form-control" />
+                    <ValidationMessage For="() => Course.Description" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="instructorid" class="form-label">Instructor ID (GUID):</label>
+                    <InputText id="instructorid" @bind-Value="InstructorIdString" class="form-control" />
+                    <ValidationMessage For="() => InstructorIdString" class="text-danger" />
+                </div>
+
+                @if (!IsInstructorIdValid)
+                {
+                    <div class="text-danger mb-3">Instructor ID must be a valid GUID.</div>
+                }
+
+                <button type="submit" class="btn btn-primary" disabled="@( !IsInstructorIdValid )">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/courses">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+
+    private Course? Course { get; set; }
+    private string InstructorIdString { get; set; } = string.Empty;
+    private bool IsInstructorIdValid { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Course = await context.Courses.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Course is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
+        InstructorIdString = Course.InstructorId.ToString();
+    }
+
+    private async Task UpdateCourse()
+    {
+        if (!Guid.TryParse(InstructorIdString, out var instructorGuid))
+        {
+            IsInstructorIdValid = false;
+            return;
+        }
+
+        IsInstructorIdValid = true;
+        Course!.InstructorId = instructorGuid;
+
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Course).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!CourseExists(Course.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+                return;
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/courses");
+    }
+
+    private bool CourseExists(Guid id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Courses.Any(e => e.Id == id);
+    }
+}

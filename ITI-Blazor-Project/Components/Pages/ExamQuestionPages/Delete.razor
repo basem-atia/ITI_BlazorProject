@@ -1,0 +1,51 @@
+﻿@page "/examquestions/delete"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<p>Are you sure you want to delete this?</p>
+<div>
+    <h2>ExamQuestion</h2>
+    <hr />
+    @if (examquestion is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <EditForm method="post" Model="examquestion" OnValidSubmit="DeleteExamQuestion" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(examquestion is null)">Delete</button> |
+            <a href="/examquestions">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private ExamQuestion? examquestion;
+
+    [SupplyParameterFromQuery]
+    private Guid ExamId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        examquestion = await context.ExamQuestions.FirstOrDefaultAsync(m => m.ExamId == ExamId);
+
+        if (examquestion is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private async Task DeleteExamQuestion()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.ExamQuestions.Remove(examquestion!);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/examquestions");
+    }
+}

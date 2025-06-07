@@ -1,0 +1,64 @@
+﻿@page "/studentcourses/details"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>StudentCourse</h2>
+    <hr />
+    @if (studentcourse is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+        </dl>
+        <label>Student Name:   </label>
+
+        <strong class="ps-4">   @studentcourse.Student?.Name</strong>
+            <br />
+            
+            <label>Student Email Address: </label>
+
+        <p><em>@studentcourse.Student?.Email</em></p>
+            <br />
+            <hr />
+            <label>Course Name: </label>
+            <p><em>@studentcourse.Course?.Title</em></p>
+            <br />
+            <label>Course Description: </label>
+            <p><em>@studentcourse.Course?.Description</em></p>
+            <br />
+        <div>
+            <a href="@($"/studentcourses/edit?studentid={studentcourse.StudentId}&courseid={studentcourse.CourseId}")">Edit</a> |
+            <a href="@($"/studentcourses")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private StudentCourse? studentcourse;
+
+    [SupplyParameterFromQuery]
+    private Guid StudentId { get; set; }
+    [SupplyParameterFromQuery]
+    private Guid CourseId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        studentcourse = await context.StudentCourses
+        .Include(sc=>sc.Course).Include(sc=>sc.Student)
+        .FirstOrDefaultAsync(m => m.StudentId == StudentId);
+
+        if (studentcourse is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

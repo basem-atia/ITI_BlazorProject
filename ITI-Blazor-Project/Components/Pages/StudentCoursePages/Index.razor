@@ -1,0 +1,67 @@
+﻿@page "/studentcourses"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using ITI_Blazor_Project
+@using ITI_Blazor_Project.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="studentcourses/create">Create New</a>
+</p>
+
+@if (StudentCourses is null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!StudentCourses.Any())
+{
+    <p>No Assigned Courses found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Course Name</th>
+                <th>Instructor Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var studCrs in StudentCourses)
+            {
+                <tr>
+                    <td>@studCrs.Student?.Name</td>
+                    <td>@studCrs.Course?.Title</td>
+                    <td>@studCrs.Student?.Instructor?.Name</td>
+                    <td>
+                        <a href="@($"/studentcourses/details?studentid={studCrs.StudentId}&courseid={studCrs.CourseId}")">Details</a> |
+                        <a href="@($"/studentcourses/edit?studentid={studCrs.StudentId}&courseid={studCrs.CourseId}")">Edit</a> |
+                        <a href="@($"/studentcourses/delete?studentid={studCrs.StudentId}&courseid={studCrs.CourseId}")">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+    private ApplicationDbContext context = default!;
+    private List<StudentCourse> StudentCourses = new List<StudentCourse>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+        StudentCourses =await context.StudentCourses.Include(sc=>sc.Student).ThenInclude(i=>i.Instructor).Include(sc=>sc.Course).ToListAsync();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

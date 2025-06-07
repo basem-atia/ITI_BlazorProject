@@ -1,0 +1,60 @@
+﻿@page "/choices"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Choices</PageTitle>
+
+<h1 class="pt-5 pb-5">Choices</h1>
+
+@if (choices is null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!choices.Any())
+{
+    <p>No choices found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Text</th>
+                <th>IsCorrect</th>
+                <th>Question</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in choices)
+            {
+                <tr>
+                    <td>@item.Text</td>
+                    <td>@item.IsCorrect</td>
+                    <td>@item.Question?.Text</td>
+                    <td>
+                        <a href="@($"/choices/details?id={item.Id}")">Details</a> |
+                        <a href="@($"/choices/edit?id={item.Id}")">Edit</a> |
+                        <a href="@($"/choices/delete?id={item.Id}")">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<p>
+    <a class="btn btn-primary" href="/choices/create">Create New</a>
+</p>
+
+@code {
+    private List<Choice>? choices;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        choices = await context.Choices.Include(c => c.Question).ToListAsync();
+    }
+}

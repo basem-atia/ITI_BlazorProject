@@ -1,0 +1,178 @@
+﻿@page "/examquestions/create"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<h1 class="mb-4">Assign Questions to Exam</h1>
+<hr />
+<h4>Every Exam should contain 5 questions only</h4>
+<h5>Selected Questions (@SelectedQuestions.Count / 5)</h5>
+<hr />
+
+@if (!Show)
+{
+    <div>
+        <label class="form-label">Exam</label>
+        @if (AvailableExams.Any())
+        {
+            <InputSelect class="form-select" @bind-Value="ExamId">
+                <option value="@Guid.Empty">-- Select Your Exam --</option>
+                @foreach (var exam in AvailableExams)
+                {
+                    <option value="@exam.Id">@exam.Title</option>
+                }
+            </InputSelect>
+            <button class="btn btn-sm btn-outline-success mt-2" @onclick="ChooseExamId">Choose Exam</button>
+            
+        }
+        else
+        {
+            <p>No eligible exams available.</p>
+        }
+    </div>
+}
+@if (Show)
+{
+    <div class="row">
+        <div class="col-md-3">
+            <strong>Available Questions</strong>
+            <div class="list-group border p-2">
+                @if (AvailableQuestions.Any())
+                {
+                    @foreach (var question in AvailableQuestions)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
+                            <span>@question.Text</span>
+                            <button class="btn btn-sm btn-outline-success" @onclick="() => AddQuestion(question)">Add</button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No eligible questions available.</p>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <strong>Selected Questions</strong>
+            <div class="list-group border p-2">
+                @foreach (var question in SelectedQuestions)
+                {
+                    <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
+                        <span>@question.Text</span>
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => RemoveQuestion(question)">Delete</button>
+                    </div>
+                }
+            </div>
+
+            <button class="btn btn-primary mt-3" @onclick="AssignAll" disabled="@(!SelectedQuestions.Any()||SelectedQuestions.Count!=5)">Add All</button>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-muted mt-2">Please choose an exam to assign questions to.</p>
+}
+
+<div class="mt-4">
+    <a href="/examquestions">Back to List</a>
+</div>
+
+@code {
+    private Guid ExamId { get; set; } = Guid.Empty;
+    private bool Show { get; set; } = false;
+
+    private List<Exam> AvailableExams = new();
+    private List<Question> AvailableQuestions = new();
+    private List<Question?> SelectedQuestions = new();
+    private List<Guid> ExistingQuestionIds = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        AvailableExams = await context.Exams.ToListAsync();
+    }
+
+    private async Task ChooseExamId()
+    {
+        if (ExamId == Guid.Empty)
+            return;
+
+        Show = true;
+
+        using var context = DbFactory.CreateDbContext();
+
+        // ExistingQuestionIds = await context.ExamQuestions
+        //     .Where(eq => eq.ExamId == ExamId)
+        //     .Select(eq => eq.QuestionId)
+        //     .ToListAsync();
+
+        // SelectedQuestions = await context.ExamQuestions
+        //     .Include(eq => eq.Question)
+        //     .Where(eq => eq.ExamId == ExamId)
+        //     .Select(eq => eq.Question)
+        //     .ToListAsync();
+        SelectedQuestions = await context.ExamQuestions.Include(eq => eq.Question)
+                                                   .Where(eq => eq.ExamId == ExamId)
+                                                   .Select(eq => eq.Question)
+                                                   .ToListAsync();
+        ExistingQuestionIds = SelectedQuestions.Select(q => q.Id).ToList();
+        
+
+
+        AvailableQuestions = await context.Questions
+            .Include(q => q.Choices)
+            .Where(q => q.Choices.Count >= 2 && !ExistingQuestionIds.Contains(q.Id))
+            .ToListAsync();
+
+        StateHasChanged(); // update UI after async void
+    }
+
+    private void AddQuestion(Question question)
+    {
+        if (!SelectedQuestions.Any(q => q.Id == question.Id))
+        {
+            SelectedQuestions.Add(question);
+            AvailableQuestions.Remove(question);
+        }
+        StateHasChanged();
+    }
+
+    private void RemoveQuestion(Question question)
+    {
+        SelectedQuestions.Remove(question);
+        if (!AvailableQuestions.Any(q => q.Id == question.Id))
+        {
+            AvailableQuestions.Add(question);
+        }
+        StateHasChanged();
+    }
+
+    private async Task AssignAll()
+    {
+        using var context = DbFactory.CreateDbContext();
+        var existingRecords = await context.ExamQuestions
+    .Where(eq => eq.ExamId == ExamId)
+    .ToListAsync();
+
+        context.ExamQuestions.RemoveRange(existingRecords);
+
+        var newLinks = SelectedQuestions
+            .Select(q => new ExamQuestion
+            {
+                ExamId = ExamId,
+                QuestionId = q.Id
+            })
+            .ToList();
+
+        if (newLinks.Any())
+        {
+            context.ExamQuestions.AddRange(newLinks);
+            await context.SaveChangesAsync();
+        }
+
+        NavigationManager.NavigateTo("/examquestions");
+    }
+}

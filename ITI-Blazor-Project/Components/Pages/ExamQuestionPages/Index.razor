@@ -1,0 +1,79 @@
+﻿@page "/examquestions"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@using ITI_Blazor_Project.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
+
+<PageTitle>Exam Questions</PageTitle>
+
+<h1 class="mb-4">Exam Questions</h1>
+
+<p>
+    <a href="/examquestions/create" class="btn btn-primary">Assign Questions to Exam</a>
+</p>
+
+@if (ExamsWithQuestions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!ExamsWithQuestions.Any())
+{
+    <p class="text-muted">No exams found with assigned questions.</p>
+}
+else
+{
+    @foreach (var exam in ExamsWithQuestions)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <strong>@exam.Title</strong>
+            </div>
+            <div class="card-body">
+                @if (exam.ExamQuestions.Any())
+                {
+                    @foreach (var eq in exam.ExamQuestions)
+                    {
+                        <div class="mb-3">
+                            <h6 class="fw-bold">@eq.Question.Text</h6>
+                            <ul class="list-group">
+                                @foreach (var choice in eq.Question.Choices)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center @(choice.IsCorrect ? "list-group-item-success" : "")">
+                                        @choice.Text
+                                        @if (choice.IsCorrect)
+                                        {
+                                            <span class="badge bg-success">✔ Correct</span>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">No questions assigned.</p>
+                }
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private ApplicationDbContext context = default!;
+    private List<Exam> ExamsWithQuestions = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+
+        ExamsWithQuestions = await context.Exams
+            .Include(e => e.ExamQuestions)
+                .ThenInclude(eq => eq.Question)
+                    .ThenInclude(q => q.Choices)
+            .ToListAsync();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

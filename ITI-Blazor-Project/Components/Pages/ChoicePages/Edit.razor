@@ -1,0 +1,124 @@
+﻿@page "/choices/edit"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1 class="pt-5 pb-5">Edit</h1>
+
+<h2>Choice</h2>
+<hr />
+@if (Choice is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Choice" OnValidSubmit="UpdateChoice" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Choice.Id" value="@Choice.Id" />
+                <div class="mb-3">
+                    <label for="text" class="form-label">Text:</label>
+                    <InputText id="text" @bind-Value="Choice.Text" class="form-control" />
+                    <ValidationMessage For="() => Choice.Text" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="iscorrect" class="form-label">IsCorrect:</label>
+                    <InputCheckbox id="iscorrect" @bind-Value="Choice.IsCorrect" class="form-check-input" />
+                    <ValidationMessage For="() => Choice.IsCorrect" class="text-danger" />
+                </div>
+                @* <div class="mb-3">
+                    <label for="questionid" class="form-label">QuestionId:</label>
+                    <InputText id="questionid" @bind-Value="Choice.QuestionId" class="form-control" />
+                    <ValidationMessage For="() => Choice.QuestionId" class="text-danger" />
+                </div> *@
+                <div class="mb-3">
+                    <p><strong>Old QuestionId: </strong> @Choice.Question?.Text</p>
+
+                        <hr />
+                    <label for="questionid" class="form-label">New QuestionId:</label>
+                    <InputSelect id="questionid" @bind-Value="NewId" class="form-control">
+                        <option value="">-- Select Question --</option>
+                        @foreach (var question in Questions)
+                        {
+                            <option value="@question.Id">@question.Text</option>
+                        }
+                    </InputSelect>
+
+                    @* <InputSelect id="questionid" @bind-Value="Choice.QuestionId">
+                        @foreach (var question in Questions)
+                        {
+                            <option value="@question.Id">@question.Text</option>
+                        }
+                    </InputSelect> *@
+                    <ValidationMessage For="() => Choice.QuestionId" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/choices">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+    private List<Question> Questions = new List<Question>();
+
+    [SupplyParameterFromForm]
+    private Choice? Choice { get; set; }
+    private Guid NewId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Choice ??= await context.Choices.Include(c=>c.Question).FirstOrDefaultAsync(m => m.Id == Id);
+        Questions = await context.Questions.ToListAsync();
+        if (Choice is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateChoice()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Choice!).State = EntityState.Modified;
+        Choice!.QuestionId = NewId;
+        
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ChoiceExists(Choice!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/choices");
+    }
+
+    private bool ChoiceExists(Guid id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Choices.Any(e => e.Id == id);
+    }
+}

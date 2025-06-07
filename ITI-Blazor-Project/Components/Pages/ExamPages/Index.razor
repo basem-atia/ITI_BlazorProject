@@ -1,0 +1,81 @@
+﻿@page "/exams"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using ITI_Blazor_Project
+@using ITI_Blazor_Project.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+
+<PageTitle>Exams</PageTitle>
+
+<h1 class="pt-5 pb-5">Exams</h1>
+
+<p>
+    <a href="exams/create">Create New</a>
+</p>
+
+@* <QuickGrid Class="table" Items="context.Exams">
+    <PropertyColumn Property="exam => exam.Title" />
+    <PropertyColumn Property="exam => exam.Date" />
+    <PropertyColumn Property="exam => exam.Duration" />
+    <PropertyColumn Property="exam => exam.InstructorId" />
+
+    <TemplateColumn Context="exam">
+        <a href="@($"exams/edit?id={exam.Id}")">Edit</a> |
+        <a href="@($"exams/details?id={exam.Id}")">Details</a> |
+        <a href="@($"exams/delete?id={exam.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid> *@
+
+@if (Exams is null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!Exams.Any())
+{
+    <p>No Exams found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Instructor Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var exam in Exams)
+            {
+                <tr>
+                    <td>@exam.Title</td>
+                    <td>@exam.Date?.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@exam.Duration.ToString(@"hh\:mm")</td>
+                    <td>@exam.Instructor?.Name</td>
+                    <td>
+                        <a href="@($"/exams/details?id={exam.Id}")">Details</a> |
+                        <a href="@($"/exams/edit?id={exam.Id}")">Edit</a> |
+                        <a href="@($"/exams/delete?id={exam.Id}")">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private ApplicationDbContext context = default!;
+    private List<Exam>? Exams = new List<Exam>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+        Exams = await context.Exams.Include(e=>e.Instructor).ToListAsync();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

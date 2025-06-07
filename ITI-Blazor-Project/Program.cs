@@ -48,7 +48,8 @@ namespace ITI_Blazor_Project
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddMudServices();
 
-            
+
+
             var app = builder.Build();
 
 
@@ -62,7 +63,7 @@ namespace ITI_Blazor_Project
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-    app.UseMigrationsEndPoint();
+                app.UseMigrationsEndPoint();
             }
 
             app.UseHttpsRedirection();

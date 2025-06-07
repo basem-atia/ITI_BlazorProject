@@ -1,0 +1,75 @@
+﻿@page "/courses/create"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Course</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Course" OnValidSubmit="AddCourse">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert" />
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <InputText id="title" @bind-Value="Course.Title" class="form-control" />
+                <ValidationMessage For="() => Course.Title" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <InputText id="description" @bind-Value="Course.Description" class="form-control" />
+                <ValidationMessage For="() => Course.Description" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label for="instructor" class="form-label">Instructor:</label>
+                <InputSelect id="instructor" @bind-Value="Course.InstructorId" class="form-select">
+                    <option value="">-- Select Instructor --</option>
+                    @foreach (var instructor in Instructors)
+                    {
+                        <option value="@instructor.Id">@instructor.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="() => Course.InstructorId" class="text-danger" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/courses">Back to List</a>
+</div>
+
+@code {
+    private Course Course { get; set; } = new();
+    private List<Instructor> Instructors = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Instructors = await context.Instructors.ToListAsync();
+    }
+
+    private async Task AddCourse()
+    {
+        if (Course.InstructorId == Guid.Empty)
+        {
+            return;
+        }
+
+        using var context = DbFactory.CreateDbContext();
+        context.Courses.Add(Course);
+        await context.SaveChangesAsync();
+
+        NavigationManager.NavigateTo("/courses");
+    }
+}

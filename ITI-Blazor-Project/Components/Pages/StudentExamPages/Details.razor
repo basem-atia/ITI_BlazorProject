@@ -1,0 +1,50 @@
+﻿@page "/studentexams/details"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>StudentExam</h2>
+    <hr />
+    @if (studentexam is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Id</dt>
+            <dd class="col-sm-10">@studentexam.Id</dd>
+            <dt class="col-sm-2">AssignedAt</dt>
+            <dd class="col-sm-10">@studentexam.AssignedAt</dd>
+            <dt class="col-sm-2">SubmittedAt</dt>
+            <dd class="col-sm-10">@studentexam.SubmittedAt</dd>
+        </dl>
+        <div>
+            <a href="@($"/studentexams/edit?studentid={studentexam.StudentId}")">Edit</a> |
+            <a href="@($"/studentexams")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private StudentExam? studentexam;
+
+    [SupplyParameterFromQuery]
+    private Guid? StudentId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        studentexam = await context.StudentExams.FirstOrDefaultAsync(m => m.StudentId == StudentId);
+
+        if (studentexam is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

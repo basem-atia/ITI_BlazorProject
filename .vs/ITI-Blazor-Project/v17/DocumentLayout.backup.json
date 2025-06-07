@@ -1,14 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\",
+  "WorkspaceRootPath": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|d:\\iti\\blazor\\d03\\lab\\project\\iti_blazorproject\\iti-blazor-project\\models\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\models\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|d:\\iti\\blazor\\d03\\lab\\project\\iti_blazorproject\\iti-blazor-project\\models\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\models\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\pages\\exampages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\pages\\exampages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\pages\\studentexampages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\pages\\studentexampages\\create.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\pages\\studentexampages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\pages\\studentexampages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\pages\\studentexampages\\edit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\pages\\studentexampages\\edit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\pages\\exampages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\pages\\exampages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\pages\\exampages\\delete.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\pages\\exampages\\delete.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\models\\studentexam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\models\\studentexam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|e:\\iti\\blazor\\day 3\\iti-blazor-project\\iti-blazor-project\\iti-blazor-project\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3BE13431-0E50-427D-93F6-2079388776E7}|ITI-Blazor-Project\\ITI-Blazor-Project.csproj|solutionrelative:iti-blazor-project\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,33 +50,128 @@
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Question.cs",
-              "DocumentMoniker": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\Models\\Question.cs",
-              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Models\\Question.cs",
-              "ToolTip": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\Models\\Question.cs",
-              "RelativeToolTip": "ITI-Blazor-Project\\Models\\Question.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-02T17:02:04.729Z",
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\Layout\\MainLayout.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\Layout\\MainLayout.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-07T11:31:07.685Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Course.cs",
-              "DocumentMoniker": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\Models\\Course.cs",
-              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Models\\Course.cs",
-              "ToolTip": "D:\\ITI\\Blazor\\D03\\Lab\\Project\\ITI_BlazorProject\\ITI-Blazor-Project\\Models\\Course.cs",
-              "RelativeToolTip": "ITI-Blazor-Project\\Models\\Course.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-01T20:26:51.435Z",
+              "Title": "Create.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Create.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Create.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Create.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Create.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-06T22:08:16.287Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Index.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Index.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Index.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Index.razor",
+              "ViewState": "AgIAABMAAACAMzMzMzMLwB0AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-06T22:34:00.603Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Edit.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Edit.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Edit.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Edit.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Edit.razor",
+              "ViewState": "AgIAAAQAAAAAMzMzMzMLwBIAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-06T22:33:13.246Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Index.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Index.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Index.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Index.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Index.razor",
+              "ViewState": "AgIAACAAAAAAAAAAAAAlwDYAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-06T22:33:06.01Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Create.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Create.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Create.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Create.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\Pages\\StudentExamPages\\Create.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-06T18:04:12.747Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Delete.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Delete.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Delete.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Delete.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\Pages\\ExamPages\\Delete.razor",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAMwBsAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-06T22:32:12.48Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "App.razor",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\App.razor",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Components\\App.razor",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Components\\App.razor",
+              "RelativeToolTip": "ITI-Blazor-Project\\Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-06T22:07:38.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "StudentExam.cs",
+              "DocumentMoniker": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Models\\StudentExam.cs",
+              "RelativeDocumentMoniker": "ITI-Blazor-Project\\Models\\StudentExam.cs",
+              "ToolTip": "E:\\iti\\blazor\\day 3\\ITI-Blazor-Project\\ITI-Blazor-Project\\ITI-Blazor-Project\\Models\\StudentExam.cs",
+              "RelativeToolTip": "ITI-Blazor-Project\\Models\\StudentExam.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-06T21:35:50.733Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
             }
           ]
         }

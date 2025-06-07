@@ -1,0 +1,115 @@
+﻿@page "/studentcourses/edit"
+@using ITI_Blazor_Project.Data
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>StudentCourse</h2>
+<hr />
+@if (StudentCourse is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="StudentCourse" OnValidSubmit="UpdateStudentCourse" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <label class="form-label">Student Name :</label>
+                <input name="StudentCourse.StudentId" value="@StudentCourse.Student?.Name" disabled/>
+                <p><strong>Old Course Name: @StudentCourse.Course?.Title</strong></p>
+                <label for="newcrs" class="form-label">New Course Name</label>
+                <InputSelect class="form-select" @bind-Value="NewCourseId">
+                    <option value="@Guid.Empty">-- Select New Course --</option>
+                    @foreach (var crs in AvailableCourses)
+                    {
+                        <option value="@crs.Id">@crs.Title</option>
+                    }
+                </InputSelect>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/studentcourses">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid StudentId { get; set; }
+    [SupplyParameterFromQuery]
+    private Guid CourseId { get; set; }
+    private List<Guid>? CoursesAssigned = new();
+    private List<Course> AvailableCourses = new();
+    private Guid NewCourseId = default!;
+    private ApplicationDbContext context = default!;
+
+    [SupplyParameterFromForm]
+    private StudentCourse? StudentCourse { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+        CoursesAssigned = await context.StudentCourses.Where(m => m.StudentId == StudentId).Select(m => m.CourseId).ToListAsync();
+        AvailableCourses = await context.Courses.Where(c => !CoursesAssigned.Contains(c.Id)).ToListAsync();
+        StudentCourse ??= await context.StudentCourses.Include(sc=>sc.Course).Include(sc=>sc.Student)
+        .FirstOrDefaultAsync(m => m.StudentId == StudentId && m.CourseId == CourseId);
+
+        if (StudentCourse is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private async Task UpdateStudentCourse()
+    {
+
+        if (StudentCourse is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
+        try
+        {
+            context.StudentCourses.Remove(StudentCourse);
+            StudentCourse newRelation  =  new StudentCourse
+            {
+                StudentId = StudentId,
+                CourseId = NewCourseId
+            };
+
+            context.StudentCourses.Add(newRelation);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!context.StudentCourses.Any(e => e.StudentId == StudentId && e.CourseId == CourseId))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/studentcourses");
+    }
+
+
+    private bool StudentCourseExists(Guid studentid)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.StudentCourses.Any(e => e.StudentId == studentid);
+    }
+}

@@ -1,0 +1,69 @@
+﻿@page "/studentcourses/delete"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<p>Are you sure you want to delete this?</p>
+<div>
+    <h2>StudentCourse</h2>
+    <hr />
+    @if (studentcourse is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else 
+    {
+        <div>
+            <label>Student Name: <em>@studentcourse.Student?.Name</em></label><br />
+            <label>Course Name: <em>@studentcourse.Course?.Title</em></label><br /><br />
+            <button class="btn btn-danger" @onclick="ConfirmAndDelete">Delete</button>
+            |
+            <a href="/studentcourses">Back to List</a>
+        </div>
+        
+
+          
+    }
+</div>
+
+@code {
+    private StudentCourse? studentcourse=new ();
+
+    [SupplyParameterFromQuery]
+    private Guid StudentId { get; set; }
+    [SupplyParameterFromQuery]
+    private Guid CourseId { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        studentcourse = await context.StudentCourses.Include(sc=>sc.Student).Include(sc=>sc.Course).FirstOrDefaultAsync(m=>m.StudentId==StudentId&&m.CourseId==CourseId);
+
+        if (studentcourse is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+    private async Task ConfirmAndDelete()
+{
+    if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete?"))
+    {
+        await DeleteStudentCourse();
+    }
+}
+
+
+    private async Task DeleteStudentCourse()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.StudentCourses.Remove(studentcourse!);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/studentcourses");
+    }
+}

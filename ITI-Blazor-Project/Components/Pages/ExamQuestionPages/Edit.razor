@@ -1,0 +1,84 @@
+﻿@page "/examquestions/edit"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>ExamQuestion</h2>
+<hr />
+@if (ExamQuestion is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="ExamQuestion" OnValidSubmit="UpdateExamQuestion" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="ExamQuestion.ExamId" value="@ExamQuestion.ExamId" />
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/examquestions">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid ExamId { get; set; }
+
+    [SupplyParameterFromForm]
+    private ExamQuestion? ExamQuestion { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        ExamQuestion ??= await context.ExamQuestions.FirstOrDefaultAsync(m => m.ExamId == ExamId);
+
+        if (ExamQuestion is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateExamQuestion()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(ExamQuestion!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ExamQuestionExists(ExamQuestion!.ExamId))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/examquestions");
+    }
+
+    private bool ExamQuestionExists(Guid examid)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.ExamQuestions.Any(e => e.ExamId == examid);
+    }
+}
