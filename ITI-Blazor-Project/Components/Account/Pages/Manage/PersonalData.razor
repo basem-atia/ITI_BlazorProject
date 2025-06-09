@@ -4,22 +4,113 @@
 
 <PageTitle>Personal Data</PageTitle>
 
-<StatusMessage />
-<h3>Personal Data</h3>
+<style>
+    .page-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        padding: 3rem 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #374151;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-<div class="row">
-    <div class="col-md-6">
+    h3 {
+        color: white;
+        font-weight: 700;
+        font-size: 2rem;
+        letter-spacing: 0.07em;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 520px;
+        width: 100%;
+        padding: 2rem 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(12px);
+        color: #1f2937;
+    }
+
+    p {
+        font-weight: 500;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    strong {
+        color: #dc2626; /* red-600 */
+    }
+
+    form, .actions {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary, .btn-danger {
+        border: none;
+        border-radius: 14px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        user-select: none;
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        color: white;
+        box-shadow: 0 6px 18px rgba(67, 206, 162, 0.4);
+    }
+
+        .btn-primary:hover {
+            box-shadow: 0 12px 28px rgba(67, 206, 162, 0.6);
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        color: white;
+        box-shadow: 0 6px 18px rgba(220, 38, 38, 0.4);
+    }
+
+        .btn-danger:hover {
+            box-shadow: 0 12px 28px rgba(220, 38, 38, 0.6);
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+</style>
+
+<div class="page-container">
+    <h3>Personal Data</h3>
+
+    <div class="card">
         <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
+        <p><strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong></p>
+
         <form action="Account/Manage/DownloadPersonalData" method="post">
             <AntiforgeryToken />
-            <button class="btn btn-primary" type="submit">Download</button>
+            <button class="btn-primary" type="submit">Download</button>
         </form>
-        <p>
-            <a href="Account/Manage/DeletePersonalData" class="btn btn-danger">Delete</a>
-        </p>
+
+        <div class="actions">
+            <a href="Account/Manage/DeletePersonalData" class="btn-danger">Delete</a>
+        </div>
     </div>
 </div>
 

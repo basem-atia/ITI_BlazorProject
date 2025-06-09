@@ -4,81 +4,220 @@
 @inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<h1 class="mb-4">Assign Questions to Exam</h1>
-<hr />
-<h4>Every Exam should contain 5 questions only</h4>
-<h5>Selected Questions (@SelectedQuestions.Count / 5)</h5>
-<hr />
+<PageTitle>Assign Questions</PageTitle>
 
-@if (!Show)
-{
-    <div>
-        <label class="form-label">Exam</label>
-        @if (AvailableExams.Any())
-        {
-            <InputSelect class="form-select" @bind-Value="ExamId">
-                <option value="@Guid.Empty">-- Select Your Exam --</option>
-                @foreach (var exam in AvailableExams)
-                {
-                    <option value="@exam.Id">@exam.Title</option>
-                }
-            </InputSelect>
-            <button class="btn btn-sm btn-outline-success mt-2" @onclick="ChooseExamId">Choose Exam</button>
-            
+<style>
+    
+        .question-box span {
+            font-size: 0.95rem;
+            font-weight: 500;
         }
-        else
-        {
-            <p>No eligible exams available.</p>
+
+    .btn-add, .btn-remove {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.35rem 0.75rem;
+        border-radius: 8px;
+    }
+
+    .btn-add {
+        background: #81c784;
+        color: white;
+        border: none;
+    }
+
+        .btn-add:hover {
+            background: #66bb6a;
         }
-    </div>
-}
-@if (Show)
-{
-    <div class="row">
-        <div class="col-md-3">
-            <strong>Available Questions</strong>
-            <div class="list-group border p-2">
-                @if (AvailableQuestions.Any())
+
+    .btn-remove {
+        background: #e57373;
+        color: white;
+        border: none;
+    }
+
+        .btn-remove:hover {
+            background: #ef5350;
+        }
+
+    .btn-primary:disabled {
+        background-color: #adb5bd;
+        border-color: #adb5bd;
+    }
+
+    .section-header {
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .btn-choose {
+        margin-top: 0.5rem;
+    }
+
+    .count-info {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #0d6efd;
+    }
+
+    .btn-back {
+        margin-top: 2rem;
+    }
+
+    .assign-container {
+        background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    .card-section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        transition: box-shadow 0.3s ease;
+    }
+
+       .card-section:hover {
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+        }
+
+    .question-box {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 0.85rem 1.1rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.3s ease;
+    }
+
+        .question-box:hover {
+            background-color: #edf2fb;
+        }
+
+    .btn-add, .btn-remove {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.9rem;
+        border-radius: 10px;
+        transition: background-color 0.25s ease;
+    }
+
+    .btn-add {
+        background-color: #38b000;
+    }
+
+        .btn-add:hover {
+            background-color: #2d6a4f;
+        }
+
+    .btn-remove {
+        background-color: #d90429;
+    }
+
+        .btn-remove:hover {
+            background-color: #9d0208;
+        }
+
+    .section-header {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #343a40;
+        border-left: 5px solid #4361ee;
+        padding-left: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .count-info {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #0077b6;
+        margin-bottom: 1rem;
+    }
+
+</style>
+
+<div class="assign-container">
+    <div class="card-section">
+        <h2 class="text-center mb-4  badge bg-dark text-white-50 mx-auto p-3">Assign Questions to Exam</h2>
+        <p class="text-muted text-center">Every Exam must contain exactly 5 questions</p>
+        <p class="count-info text-center">Selected Questions: @SelectedQuestions.Count / 5</p>
+        <hr />
+
+        @if (!Show)
+        {
+            <div class="mb-4">
+                <label class="form-label">Choose an Exam</label>
+                @if (AvailableExams.Any())
                 {
-                    @foreach (var question in AvailableQuestions)
-                    {
-                        <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
-                            <span>@question.Text</span>
-                            <button class="btn btn-sm btn-outline-success" @onclick="() => AddQuestion(question)">Add</button>
-                        </div>
-                    }
+                    <InputSelect class="form-select" @bind-Value="ExamId">
+                        <option value="@Guid.Empty">-- Select Your Exam --</option>
+                        @foreach (var exam in AvailableExams)
+                        {
+                            <option value="@exam.Id">@exam.Title</option>
+                        }
+                    </InputSelect>
+                    <button class="btn btn-success btn-sm btn-choose" @onclick="ChooseExamId">Choose Exam</button>
                 }
                 else
                 {
-                    <p>No eligible questions available.</p>
+                    <p class="text-danger">No eligible exams available.</p>
                 }
             </div>
-        </div>
+        }
 
-        <div class="col-md-3">
-            <strong>Selected Questions</strong>
-            <div class="list-group border p-2">
-                @foreach (var question in SelectedQuestions)
-                {
-                    <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
-                        <span>@question.Text</span>
-                        <button class="btn btn-sm btn-outline-danger" @onclick="() => RemoveQuestion(question)">Delete</button>
-                    </div>
-                }
+        @if (Show)
+        {
+            <div class="row">
+                <div class="col-md-6 mt-3">
+                    <h5 class="section-header badge bg-dark text-white-50 mx-auto p-3">Available Questions</h5>
+                    @if (AvailableQuestions.Any())
+                    {
+                        @foreach (var question in AvailableQuestions)
+                        {
+                            <div class="question-box">
+                                <span>@question.Text</span>
+                                <button class="btn btn-add" @onclick="() => AddQuestion(question)">Add</button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">No available questions right now.</p>
+                    }
+                </div>
+
+                <div class="col-md-6 mt-3">
+                    <h5 class="section-header badge bg-dark text-white-50 mx-auto p-3">Selected Questions</h5>
+                    @if (SelectedQuestions.Any())
+                    {
+                        @foreach (var question in SelectedQuestions)
+                        {
+                            <div class="question-box">
+                                <span>@question.Text</span>
+                                <button class="btn btn-remove" @onclick="() => RemoveQuestion(question)">Delete</button>
+                            </div>
+                        }
+                        <button class="btn btn-primary mt-3" @onclick="AssignAll" disabled="@(!SelectedQuestions.Any() || SelectedQuestions.Count != 5)">
+                            Assign All Questions
+                        </button>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No questions selected.</p>
+                    }
+                </div>
             </div>
+        }
 
-            <button class="btn btn-primary mt-3" @onclick="AssignAll" disabled="@(!SelectedQuestions.Any()||SelectedQuestions.Count!=5)">Add All</button>
+        <div class="text-center btn-back">
+            <a href="/examquestions" class="btn btn-outline-secondary">Back to List</a>
         </div>
     </div>
-}
-else
-{
-    <p class="text-muted mt-2">Please choose an exam to assign questions to.</p>
-}
-
-<div class="mt-4">
-    <a href="/examquestions">Back to List</a>
 </div>
+
 
 @code {
     private Guid ExamId { get; set; } = Guid.Empty;

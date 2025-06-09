@@ -4,31 +4,125 @@
 @inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Details</PageTitle>
+<PageTitle>Question Details</PageTitle>
 
-<h1>Details</h1>
-
-<div>
-    <h2>Question</h2>
-    <hr />
-    @if (Question is null)
-    {
-        <p><em>Loading...</em></p>
+<style>
+    .details-container {
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
     }
-    else
-    {
-        <dl class="row">
-            <dt class="col-sm-2">Text</dt>
-            <dd class="col-sm-10">@Question.Text</dd>
 
-            <dt class="col-sm-2">Course</dt>
-            <dd class="col-sm-10">@Question.Course?.Title (@Question.CourseId)</dd>
-        </dl>
-        <div>
-            <a href="@($"/questions/edit?id={Question.Id}")">Edit</a> |
-            <a href="/questions">Back to List</a>
-        </div>
+    .details-card {
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 2rem;
+        max-width: 800px;
+        width: 100;
     }
+
+    .badge-question {
+        font-size: 1.2rem;
+        padding: 0.6rem 1rem;
+        background-color: #7b2ff7;
+        color: white;
+        border-radius: 30px;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    .choice-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 10px;
+    border-left: 5px solid #7b2ff7;
+    flex-wrap: wrap;
+}
+
+    .choice-text {
+        flex: 1 1 auto;
+        word-break: break-word;
+        font-weight: 500;
+    }
+
+    .choice-badge {
+        margin-left: 1rem;
+    }
+
+
+    .btn-custom {
+        background: linear-gradient(to right, #7b2ff7, #f107a3);
+        color: white;
+        font-weight: 600;
+        border: none;
+    }
+
+    .btn-custom:hover {
+        opacity: 0.9;
+    }
+
+    .btn-back {
+        background-color: #dee2e6;
+        font-weight: 600;
+    }
+
+    .btn-back:hover {
+        background-color: #ced4da;
+    }
+</style>
+
+<div class="details-container">
+    <div class="details-card w-75">
+        @if (Question is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <div class="badge-question">@Question.Text</div>
+
+            <dl class="row">
+                <dt class="col-sm-3">Course</dt>
+                <dd class="col-sm-9">@Question.Course?.Title</dd>
+            </dl>
+
+            @if (Question.Choices != null && Question.Choices.Any())
+            {
+                <h2 class="mt-4 mb-4 fw-bold">Choices :</h2>
+                @foreach (var choice in Question.Choices)
+                {
+                    <div class="choice-item">
+                        <strong class="w-75">@choice.Text</strong>
+                        @if (choice.IsCorrect)
+                        {
+                            <span class="badge bg-success ms-2">Correct</span>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">No choices added for this question.</p>
+            }
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/questions" class="btn btn-back px-4">
+                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                </a>
+                <a href="@($"/questions/edit?id={Question.Id}")" class="btn btn-custom px-4">
+                    <i class="bi bi-pencil-square me-1"></i> Edit
+                </a>
+            </div>
+        }
+    </div>
 </div>
 
 @code {
@@ -47,7 +141,8 @@
 
         using var context = DbFactory.CreateDbContext();
         Question = await context.Questions
-            .Include(q => q.Course) 
+            .Include(q => q.Course)
+            .Include(q => q.Choices) // Include choices here
             .FirstOrDefaultAsync(q => q.Id == Id);
 
         if (Question is null)

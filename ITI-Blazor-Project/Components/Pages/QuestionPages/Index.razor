@@ -6,45 +6,54 @@
 @inject IDbContextFactory<ApplicationDbContext> DbFactory
 
 <PageTitle>Questions</PageTitle>
-
-<h1>Questions</h1>
-
-
-<p>
+<div class="d-flex align-items-center justify-content-between mb-3 mt-3">
+    <h1 class="mb-4 badge bg-dark text-white-50 text-body p-3 mt-3 mb-3 ms-5 ps-5 pe-5" style="font-size:16px;">Questions</h1>
+<p class="me-3">
     <a class="btn btn-primary" href="/questions/create">Create New</a>
     <a class="btn btn-secondary ms-2" href="/courses">Back to Courses</a>
     <a class="btn btn-info ms-2" href="/exams">Go to Exams</a>
 </p>
+</div>
+
 
 @if (Questions is null)
 {
     <p><em>Loading...</em></p>
 }
+else if (!Questions.Any())
+{
+    <p class="text-muted">No questions found.</p>
+}
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Text</th>
-                <th>Course ID</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var question in Questions)
-            {
-                <tr>
-                    <td>@question.Text</td>
-                    <td>@question.CourseId</td>
-                    <td>
-                        <a href="@($"/questions/edit?id={question.Id}")">Edit</a> |
-                        <a href="@($"/questions/details?id={question.Id}")">Details</a> |
-                        <a href="@($"/questions/delete?id={question.Id}")">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @foreach (var question in Questions)
+    {
+        <div class="card mb-4 ms-4 me-4 shadow-sm">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <span class="fw-bold">Q: @question.Text</span>
+                <span class="badge bg-secondary me-5">Course Name: @question.Course?.Title</span>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach (var choice in question.Choices)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center @(choice.IsCorrect ? "list-group-item-success" : "")">
+                            @choice.Text
+                            @if (choice.IsCorrect)
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Correct</span>
+                            }
+                        </li>
+                    }
+                </ul>
+                <div class="mt-3 text-end">
+                    <a href="@($"/questions/edit?id={question.Id}")" class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-pencil"></i> Edit</a>
+                    <a href="@($"/questions/details?id={question.Id}")" class="btn btn-sm btn-outline-info me-2"><i class="bi bi-info-circle"></i> Details</a>
+                    <a href="@($"/questions/delete?id={question.Id}")" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Delete</a>
+                </div>
+            </div>
+        </div>
+    }
 }
 
 @code {
@@ -54,7 +63,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         context = DbFactory.CreateDbContext();
-        Questions = await context.Questions.ToListAsync();
+        Questions = await context.Questions.Include(q => q.Choices).Include(q=>q.Course).ToListAsync();
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();

@@ -1,0 +1,193 @@
+﻿@page "/Student/EnrolledCourses"
+@using ITI_Blazor_Project.Data
+@using ITI_Blazor_Project
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager Navigation
+@inject ApplicationDbContext DbContext
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthProvider
+
+<style>
+    .courses-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3rem 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #374151;
+    }
+
+    .courses-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+        width: 100%;
+        padding: 2.5rem 2rem;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        animation: fadeInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    }
+
+    h3 {
+		font-size: 2rem;
+        color: #4f46e5; 
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    table.table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+    }
+
+        table.table thead tr th {
+            background: transparent;
+            color: #6b7280; 
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+            text-align: left;
+        }
+
+        table.table tbody tr {
+            background: #f9fafb;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgb(0 0 0 / 0.05);
+        }
+
+            table.table tbody tr td {
+                padding: 0.75rem 1rem;
+                vertical-align: middle;
+                color: #374151;
+            }
+
+                table.table tbody tr td button.btn-info {
+                    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+                    border: none;
+                    border-radius: 12px;
+                    padding: 0.5rem 1.25rem;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    color: white;
+                }
+
+                    table.table tbody tr td button.btn-info:hover {
+                        box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
+                        transform: translateY(-2px);
+                    }
+
+    .alert {
+        max-width: 900px;
+        margin: 1.5rem auto 0 auto;
+        font-weight: 600;
+    }
+
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+</style>
+
+<div class="courses-container">
+    <div class="courses-card">
+        <h3>My Enrolled Courses</h3>
+
+        @if (enrolledCourses == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else if (!enrolledCourses.Any())
+        {
+            <p><em>You are not enrolled in any courses yet.</em></p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Exams</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in enrolledCourses)
+                    {
+                        <tr>
+                            <td>@course.Title</td>
+                            <td>@course.Description</td>
+                            <td>
+                                <button class="btn btn-info"
+                                        @onclick="() => ShowExams(course.Id)">
+                                    View Exams
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-success mt-3">@message</div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<Course> enrolledCourses = new();
+    private Guid studentId;
+    private string message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+
+        if (user == null)
+        {
+            Navigation.NavigateTo("/Account/Login");
+            return;
+        }
+
+        var student = await DbContext.Students.FirstOrDefaultAsync(s => s.Email == user.Email);
+
+        if (student == null)
+        {
+            message = "Student profile not found for this user.";
+            return;
+        }
+
+        studentId = student.Id;
+
+        enrolledCourses = await DbContext.StudentCourses
+            .Where(sc => sc.StudentId == studentId)
+            .Include(sc => sc.Course)
+            .Select(sc => sc.Course!)
+            .ToListAsync();
+    }
+
+    private void ShowExams(Guid courseId)
+    {
+        Navigation.NavigateTo($"/Student/CourseExams/{courseId}");
+    }
+}

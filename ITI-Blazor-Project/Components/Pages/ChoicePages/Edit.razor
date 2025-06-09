@@ -4,44 +4,98 @@
 @inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Edit</PageTitle>
+<PageTitle>Edit Choice</PageTitle>
+<style>
+    body{
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        
+    }
+    .edit-container {
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        min-height: 100vh;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
 
-<h1 class="pt-5 pb-5">Edit</h1>
+    .edit-card {
+        background-color: white;
+        
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 600px;
+    }
 
-<h2>Choice</h2>
-<hr />
-@if (Choice is null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div class="row">
-        <div class="col-md-4">
+    .btn-save {
+        background: linear-gradient(to right, #7b2ff7, #f107a3);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+
+        .btn-save:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+
+    .btn-back {
+        font-weight: 600;
+        background-color: #e9ecef;
+        color: #212529;
+        transition: 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background-color: #ced4da;
+            transform: scale(1.03);
+        }
+
+    .form-control-plaintext {
+        background-color: #f8f9fa;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-style: italic;
+    }
+</style>
+
+<div class="edit-container">
+    <div class="edit-card">
+        <h2 class="mb-4 text-center badge bg-dark p-3">Edit Choice</h2>
+
+        @if (Choice is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
             <EditForm method="post" Model="Choice" OnValidSubmit="UpdateChoice" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert"/>
+                <ValidationSummary role="alert" class="text-danger" />
+
                 <input type="hidden" name="Choice.Id" value="@Choice.Id" />
+
                 <div class="mb-3">
                     <label for="text" class="form-label">Text:</label>
                     <InputText id="text" @bind-Value="Choice.Text" class="form-control" />
                     <ValidationMessage For="() => Choice.Text" class="text-danger" />
                 </div>
-                <div class="mb-3">
-                    <label for="iscorrect" class="form-label">IsCorrect:</label>
-                    <InputCheckbox id="iscorrect" @bind-Value="Choice.IsCorrect" class="form-check-input" />
-                    <ValidationMessage For="() => Choice.IsCorrect" class="text-danger" />
-                </div>
-                @* <div class="mb-3">
-                    <label for="questionid" class="form-label">QuestionId:</label>
-                    <InputText id="questionid" @bind-Value="Choice.QuestionId" class="form-control" />
-                    <ValidationMessage For="() => Choice.QuestionId" class="text-danger" />
-                </div> *@
-                <div class="mb-3">
-                    <p><strong>Old QuestionId: </strong> @Choice.Question?.Text</p>
 
-                        <hr />
-                    <label for="questionid" class="form-label">New QuestionId:</label>
+                <div class="mb-3 form-check">
+                    <InputCheckbox id="iscorrect" @bind-Value="Choice.IsCorrect" class="form-check-input" />
+                    <label for="iscorrect" class="form-check-label ms-2">Is Correct</label>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Current Question:</label>
+                    <div class="form-control-plaintext">@Choice.Question?.Text</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="questionid" class="form-label">New Question:</label>
                     <InputSelect id="questionid" @bind-Value="NewId" class="form-control">
                         <option value="">-- Select Question --</option>
                         @foreach (var question in Questions)
@@ -49,24 +103,22 @@ else
                             <option value="@question.Id">@question.Text</option>
                         }
                     </InputSelect>
-
-                    @* <InputSelect id="questionid" @bind-Value="Choice.QuestionId">
-                        @foreach (var question in Questions)
-                        {
-                            <option value="@question.Id">@question.Text</option>
-                        }
-                    </InputSelect> *@
                     <ValidationMessage For="() => Choice.QuestionId" class="text-danger" />
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </EditForm>
-        </div>
-    </div>
-}
 
-<div>
-    <a href="/choices">Back to List</a>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/choices" class="btn btn-back">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-save px-4">
+                        <i class="bi bi-save me-1"></i> Save
+                    </button>
+                </div>
+            </EditForm>
+        }
+    </div>
 </div>
+
 
 @code {
     [SupplyParameterFromQuery]

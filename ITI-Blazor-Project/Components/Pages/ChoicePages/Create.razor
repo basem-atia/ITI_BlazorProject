@@ -5,75 +5,125 @@
 @inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Create Choice</PageTitle>
 
-<h1 class="pt-5 pb-5">Create Choice</h1>
+<style>
+ 
+    body {
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+    }
 
-<hr class="me-10" />
-<div class="row">
-    <div class="col-md-4">
-        <EditForm method="post" Model="Choice" OnValidSubmit="AddChoice" FormName="create" Enhance>
+    .form-container {
+       
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .custom-card {
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #5f27cd;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .btn-custom {
+       
+        border: none;
+        color: white;
+        font-weight: 600;
+    }
+
+        .btn-custom:hover {
+            opacity: 0.9;
+        }
+
+    .btn-cancel {
+        background-color: #dee2e6;
+        font-weight: 600;
+    }
+
+        .btn-cancel:hover {
+            background-color: #ced4da;
+        }
+</style>
+
+<div class="form-container">
+    <div class="custom-card">
+        <div class="form-title">Create New Choice</div>
+
+        <EditForm method="post" Model="Choice" OnValidSubmit="AddChoice">
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
+            <ValidationSummary class="text-danger mb-3" />
+
             <div class="mb-3">
-                <label for="text" class="form-label">Text:</label> 
-                <InputText id="text" @bind-Value="Choice.Text" class="form-control" /> 
-                <ValidationMessage For="() => Choice.Text" class="text-danger" /> 
-            </div>        
+                <label for="text" class="form-label">Choice Text</label>
+                <InputText id="text" @bind-Value="Choice.Text" class="form-control" />
+                <ValidationMessage For="() => Choice.Text" class="text-danger" />
+            </div>
+
+            <div class="form-check mb-3">
+                <InputCheckbox id="iscorrect" @bind-Value="Choice.IsCorrect" class="form-check-input" />
+                <label class="form-check-label" for="iscorrect">Is Correct</label>
+                <ValidationMessage For="() => Choice.IsCorrect" class="text-danger d-block" />
+            </div>
+
             <div class="mb-3">
-                <label for="iscorrect" class="form-label">IsCorrect:</label> 
-                <InputCheckbox id="iscorrect" @bind-Value="Choice.IsCorrect" class="form-check-input" /> 
-                <ValidationMessage For="() => Choice.IsCorrect" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="questionid" class="form-label">QuestionId:</label> 
-                @* <InputText id="questionid" @bind-Value="QuestionIdString" class="form-control" />  *@
-                <InputSelect id="questionid" @bind-Value="Choice.QuestionId">
+                <label for="questionid" class="form-label">Select Question</label>
+                <InputSelect id="questionid" @bind-Value="Choice.QuestionId" class="form-select">
                     <option value="@Guid.Empty">-- Select Question --</option>
                     @foreach (var question in Questions)
                     {
                         <option value="@question.Id">@question.Text</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="() => Choice.QuestionId" class="text-danger" /> 
-            </div>        
-            <button type="submit" class="btn btn-primary">Create</button>
+                <ValidationMessage For="() => Choice.QuestionId" class="text-danger" />
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/choices" class="btn btn-cancel px-4">
+                    <i class="bi bi-arrow-left me-1"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-dark px-4">
+                    <i class="bi bi-check-circle me-1"></i> Create Choice
+                </button>
+            </div>
         </EditForm>
     </div>
-</div>
-
-<div>
-    <a href="/choices">Back to List</a>
 </div>
 
 @code {
     [SupplyParameterFromForm]
     private Choice Choice { get; set; } = new();
     private List<Question> Questions = new List<Question>();
-    // private string QuestionIdString
-    // {
-    //     get => Choice.QuestionId.ToString();
-    //     set
-    //     {
-    //         if (Guid.TryParse(value, out var guid))
-    //         {
-    //             Choice.QuestionId = guid;
-    //         }
-    //     }
-    // }
+
     protected override async Task OnInitializedAsync()
     {
         await using ApplicationDbContext context = await DbFactory.CreateDbContextAsync();
         Questions = await context.Questions.ToListAsync();
     }
 
-    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddChoice()
     {
         if (Choice.QuestionId == Guid.Empty)
-        {
             return;
-        }
+
         using var context = DbFactory.CreateDbContext();
         context.Choices.Add(Choice);
         await context.SaveChangesAsync();

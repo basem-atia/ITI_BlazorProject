@@ -1,7 +1,130 @@
 ﻿@page "/instructor"
 
-<h3>InstructorHome</h3>
+<style>
+    .instructor-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 3rem 1rem;
+        color: #374151;
+    }
+
+    .instructor-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 700px;
+        width: 100%;
+        padding: 3rem 2.5rem;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-align: center;
+        animation: fadeInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    }
+
+    .instructor-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #4f46e5;
+        margin-bottom: 1.5rem;
+    }
+
+    .instructor-lead {
+        font-size: 1.15rem;
+        color: #6b7280;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 2rem auto;
+    }
+
+    .btn-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        margin-top: 1.5rem;
+    }
+
+    .btn-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1rem;
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        max-width: 300px;
+        box-shadow: 0 8px 20px rgb(79 70 229 / 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgb(67 56 202 / 0.6);
+        }
+
+    .btn-icon {
+        font-size: 1.2rem;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="instructor-container">
+    <div class="instructor-card">
+        <h2 class="instructor-title">Welcome to the Instructor Portal</h2>
+        <p class="instructor-lead">
+            Here, you can create new courses, add questions, and organize exams for your students.
+        </p>
+
+        <div class="btn-list">
+            <button class="btn-action" @onclick="NavigateToCreateCourse">
+                📘 <span>Create Course</span>
+            </button>
+            <button class="btn-action" @onclick="NavigateToCreateQuestion">
+                ❓ <span>Create Question</span>
+            </button>
+            <button class="btn-action" @onclick="NavigateToCreateExam">
+                📝 <span>Create Exam</span>
+            </button>
+        </div>
+    </div>
+</div>
 
 @code {
+    [Inject] NavigationManager Navigation { get; set; } = default!;
 
+    void NavigateToCreateCourse()
+    {
+        Navigation.NavigateTo("/courses/create");
+    }
+
+    void NavigateToCreateQuestion()
+    {
+        Navigation.NavigateTo("/questions/create");
+    }
+
+    void NavigateToCreateExam()
+    {
+        Navigation.NavigateTo("/exams/create");
+    }
 }

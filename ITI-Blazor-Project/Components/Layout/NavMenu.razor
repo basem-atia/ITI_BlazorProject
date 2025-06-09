@@ -10,37 +10,33 @@
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        @* <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div> *@
-
-        @* <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div> *@
-
-        @* <div class="nav-item px-3">
-            <NavLink class="nav-link" href="auth">
-                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
-            </NavLink>
-        </div> *@
+<div class="nav-scrollable w-100" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column w-100">
 
         <AuthorizeView Roles="Student">
             <Authorized>
-                <div class="nav-item px-3">
+                <div class="nav-item px-0">
                     <NavLink class="nav-link" href="/student">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span>Student
+                        <div class="nav-content">
+                            <span class="bi bi-house-door-fill" aria-hidden="true"></span>
+                            <span>Student Home</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/Student/Courses">
+                        <div class="nav-content">
+                            <span class="bi bi-book" aria-hidden="true"></span>
+                            <span>Courses</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/Student/EnrolledCourses">
+                        <div class="nav-content">
+                            <span class="bi bi-clipboard-check" aria-hidden="true"></span>
+                            <span>Enrolled Courses</span>
+                        </div>
                     </NavLink>
                 </div>
             </Authorized>
@@ -48,29 +44,92 @@
 
         <AuthorizeView Roles="Instructor">
             <Authorized>
-                <div class="nav-item px-3">
+                <div class="nav-item px-0">
                     <NavLink class="nav-link" href="/instructor">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span>Instructor
+                        <div class="nav-content">
+                            <span class="bi bi-house-door-fill" aria-hidden="true"></span>
+                            <span>Instructor Home</span>
+                        </div>
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/choices" Match="NavLinkMatch.All">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span>Choices
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/courses">
+                        <div class="nav-content">
+                            <span class="bi bi-journal-bookmark-fill" aria-hidden="true"></span>
+                            <span>Courses</span>
+                        </div>
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/choices/create" Match="NavLinkMatch.All">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span>Create Choice
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/courses/create">
+                        <div class="nav-content">
+                            <span class="bi bi-plus-square-fill" aria-hidden="true"></span>
+                            <span>Create Course</span>
+                        </div>
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/exams" Match="NavLinkMatch.All">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span>Exams
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/questions">
+                        <div class="nav-content">
+                            <span class="bi bi-question-circle-fill" aria-hidden="true"></span>
+                            <span>Questions</span>
+                        </div>
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/exams/create" Match="NavLinkMatch.All">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span>Create Exam
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/questions/create">
+                        <div class="nav-content">
+                            <span class="bi bi-plus-square-fill" aria-hidden="true"></span>
+                            <span>Create Question</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/choices">
+                        <div class="nav-content">
+                            <span class="bi bi-check-square-fill" aria-hidden="true"></span>
+                            <span>Choices</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/choices/create">
+                        <div class="nav-content">
+                            <span class="bi bi-plus-square-fill" aria-hidden="true"></span>
+                            <span>Create Choice</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/exams">
+                        <div class="nav-content">
+                            <span class="bi bi-journal-text" aria-hidden="true"></span>
+                            <span>Exams</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/exams/create">
+                        <div class="nav-content">
+                            <span class="bi bi-plus-square-fill" aria-hidden="true"></span>
+                            <span>Create Exam</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/examquestions">
+                        <div class="nav-content">
+                            <span class="bi bi-list-task" aria-hidden="true"></span>
+                            <span>Exam Questions</span>
+                        </div>
+                    </NavLink>
+                </div>
+                <div class="nav-item px-0">
+                    <NavLink class="nav-link" href="/examquestions/create">
+                        <div class="nav-content">
+                            <span class="bi bi-plus-square-fill" aria-hidden="true"></span>
+                            <span>Assign Questions</span>
+                        </div>
                     </NavLink>
                 </div>
             </Authorized>
@@ -78,36 +137,70 @@
 
         <AuthorizeView>
             <Authorized>
-                <div class="nav-item px-3">
+                <div class="nav-item px-0">
                     <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
+                        <div class="nav-content">
+                            <span class="bi bi-person-fill" aria-hidden="true"></span>
+                            <span>@context.User.Identity?.Name</span>
+                        </div>
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
+                <div class="nav-item px-0">
                     <form action="Account/Logout" method="post">
                         <AntiforgeryToken />
                         <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-                        <button type="submit" class="nav-link">
-                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                        <button type="submit" class="nav-link btn btn-link text-start p-0">
+                            <div class="nav-content">
+                                <span class="bi bi-box-arrow-left" aria-hidden="true"></span>
+                                <span>Logout</span>
+                            </div>
                         </button>
                     </form>
                 </div>
             </Authorized>
             <NotAuthorized>
-                <div class="nav-item px-3">
+                <div class="nav-item px-0">
                     <NavLink class="nav-link" href="Account/Register">
-                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                        <div class="nav-content">
+                            <span class="bi bi-person-plus-fill" aria-hidden="true"></span>
+                            <span>Register</span>
+                        </div>
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
+                <div class="nav-item px-0">
                     <NavLink class="nav-link" href="Account/Login">
-                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                        <div class="nav-content">
+                            <span class="bi bi-box-arrow-in-right" aria-hidden="true"></span>
+                            <span>Login</span>
+                        </div>
                     </NavLink>
                 </div>
             </NotAuthorized>
         </AuthorizeView>
     </nav>
 </div>
+
+<style>
+    .nav-link {
+        display: block;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .nav-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .nav-content .bi {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+</style>
 
 @code {
     private string? currentUrl;
@@ -129,4 +222,3 @@
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }
-

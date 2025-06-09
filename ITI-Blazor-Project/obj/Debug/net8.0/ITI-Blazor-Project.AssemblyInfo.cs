@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ITI-Blazor-Project")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89ecba632f4d23fbc0be7ee1aabae507a49b9eeb")]
 [assembly: System.Reflection.AssemblyProductAttribute("ITI-Blazor-Project")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ITI-Blazor-Project")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

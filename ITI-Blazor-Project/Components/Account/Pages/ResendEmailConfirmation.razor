@@ -12,23 +12,178 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Resend email confirmation</PageTitle>
+<PageTitle>Resend Email Confirmation</PageTitle>
 
-<h1>Resend email confirmation</h1>
-<h2>Enter your email.</h2>
-<hr />
-<StatusMessage Message="@message" />
-<div class="row">
-    <div class="col-md-4">
+<style>
+    .resend-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        padding: 2rem 1rem;
+    }
+
+    .resend-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 100%;
+        padding: 3.5rem 3rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        animation: fadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    }
+
+    .resend-title {
+        font-size: 2.25rem;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 2rem;
+        background: linear-gradient(90deg, #4361ee 0%, #3a0ca3 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+        text-decoration: none;
+    }
+
+    .resend-subtitle {
+        text-align: center;
+        color: #6b7280;
+        margin-bottom: 2rem;
+        font-size: 1.05rem;
+    }
+
+    .modern-input-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .modern-input {
+        width: 100%;
+        height: 60px;
+        padding: 1.5rem 1.25rem 0.5rem 3rem;
+        border-radius: 14px;
+        border: 2px solid #eef2f7;
+        background: #f8fafc;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        outline: none;
+    }
+
+        .modern-input:focus {
+            border-color: #43cea2;
+            box-shadow: 0 5px 15px rgba(67, 206, 162, 0.25);
+            background: white;
+            transform: translateY(-1px);
+        }
+
+        .modern-input::placeholder {
+            color: #94a3b8;
+        }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 1.25rem;
+        pointer-events: none;
+        user-select: none;
+        z-index: 1;
+    }
+
+    .resend-btn {
+        width: 100%;
+        padding: 1.1rem;
+        background: linear-gradient(90deg, #4361ee 0%, #3a0ca3 100%);
+        border: none;
+        border-radius: 14px;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 20px rgba(67, 206, 162, 0.25);
+    }
+
+        .resend-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(67, 206, 162, 0.35);
+        }
+
+        .resend-btn:active {
+            transform: translateY(0);
+        }
+
+    .validation-message {
+        color: #dc2626;
+        font-size: 0.875rem;
+        margin-top: 8px;
+        display: block;
+        font-weight: 500;
+    }
+
+    .text-danger {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #ef4444;
+        background-color: #fee2e2;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .status-message {
+        text-align: center;
+        color: #16a34a;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+    }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+</style>
+
+
+<div class="resend-container">
+    <div class="resend-card">
+        <h1 class="resend-title">Resend Confirmation</h1>
+        <p class="resend-subtitle">Enter your email and we’ll send a new confirmation link.</p>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="status-message">@message</div>
+        }
+
         <EditForm Model="Input" FormName="resend-email-confirmation" OnValidSubmit="OnValidSubmitAsync" method="post">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" aria-required="true" placeholder="name@example.com" />
-                <label for="email" class="form-label">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger" />
+
+            <div class="modern-input-group">
+                <span class="input-icon">📧</span>
+                <InputText @bind-Value="Input.Email" class="modern-input" placeholder="Enter your email" aria-required="true" />
+                <ValidationMessage For="@(() => Input.Email)" class="validation-message" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Resend</button>
+
+            <button type="submit" class="resend-btn">Resend Confirmation</button>
         </EditForm>
     </div>
 </div>
@@ -51,9 +206,11 @@
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
             NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
+
         await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
         message = "Verification email sent. Please check your email.";

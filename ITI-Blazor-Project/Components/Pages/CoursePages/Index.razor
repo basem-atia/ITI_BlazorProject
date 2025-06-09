@@ -1,61 +1,188 @@
-﻿@page "/courses"  
-@using Microsoft.EntityFrameworkCore  
-@using ITI_Blazor_Project  
-@using ITI_Blazor_Project.Data  
-@implements IAsyncDisposable  
-@inject IDbContextFactory<ApplicationDbContext> DbFactory  
+﻿@page "/courses"
+@using Microsoft.EntityFrameworkCore
+@using ITI_Blazor_Project
+@using ITI_Blazor_Project.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 
-<PageTitle>Courses</PageTitle>  
+<PageTitle>Courses</PageTitle>
 
-<h1>Courses</h1>  
+<style>
+    .page-bg {
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        min-height: 100vh;
+    }
 
-<p>
-    <a class="btn btn-primary" href="/courses/create">Create New</a>
-    <a class="btn btn-secondary ms-2" href="/questions">Go to Questions</a>
-</p>
+    .courses-header {
+        margin-left: 3rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
 
-@if (Courses is null)  
-{  
-    <p><em>Loading...</em></p>  
-}  
-else  
-{  
-    <table class="table table-striped">  
-        <thead>  
-            <tr>  
-                <th>Title</th>  
-                <th>Description</th>  
-                <th>Instructor ID</th>  
-                <th>Actions</th>  
-            </tr>  
-        </thead>  
-        <tbody>  
-            @foreach (var course in Courses)  
-            {  
-                <tr>  
-                    <td>@course.Title</td>  
-                    <td>@course.Description</td>  
-                    <td>@course.InstructorId</td>  
-                    <td>  
-                        <a href="@($"/courses/edit?id={course.Id}")">Edit</a> |  
-                        <a href="@($"/courses/details?id={course.Id}")">Details</a> |  
-                        <a href="@($"/courses/delete?id={course.Id}")">Delete</a>  
-                    </td>  
-                </tr>  
-            }  
-        </tbody>  
-    </table>  
-}  
+    .courses-actions {
+        margin-right: 3rem;
+    }
 
-@code {  
-    private ApplicationDbContext context = default!;  
-    private List<Course>? Courses;  
+    .card-course {
+        border-radius: 16px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fff;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
-    protected override async Task OnInitializedAsync()  
-    {  
-        context = DbFactory.CreateDbContext();  
-        Courses = await context.Courses.ToListAsync();  
-    }  
+        .card-course:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+        }
 
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();  
+    .card-body-course {
+        padding: 1.75rem 2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-title-course {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #4361ee;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        user-select: none;
+    }
+
+    .course-description {
+        color: #555;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+    }
+
+    .instructor-badge {
+        background-color: #d0e7ff;
+        color: #1a3d7c;
+        padding: 0.35rem 0.9rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        user-select: none;
+        width: fit-content;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 1px 3px rgba(67, 97, 238, 0.3);
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn-outline-secondary,
+    .btn-outline-primary,
+    .btn-outline-danger {
+        flex: 1;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        transition: background-color 0.25s ease, color 0.25s ease;
+        user-select: none;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #4361ee;
+            color: #fff;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+    .course-col {
+        margin-bottom: 2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+</style>
+
+<div class="page-bg py-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="courses-header badge bg-light shadow-sm rounded-pill">
+            <i class="bi bi-journal-bookmark-fill text-primary me-2"></i>Courses
+        </h1>
+        <p class="courses-actions">
+            <a class="btn btn-primary" href="/courses/create">
+                <i class="bi bi-plus-circle me-1"></i> Create New Course
+            </a>
+            <a class="btn btn-secondary ms-2" href="/questions">Go to Questions</a>
+        </p>
+    </div>
+
+    @if (Courses is null)
+    {
+        <p class="text-center"><em>Loading...</em></p>
+    }
+    else if (!Courses.Any())
+    {
+        <p class="text-center text-muted">No courses found.</p>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            @foreach (var course in Courses)
+            {
+                <div class="col-md-6 col-lg-5 course-col">
+                    <div class="card card-course h-100">
+                        <div class="card-body card-body-course">
+                            <h5 class="card-title-course">
+                                <i class="bi bi-book"></i> @course.Title
+                            </h5>
+                            <p class="course-description">@course.Description</p>
+                            <span class="instructor-badge">
+                                Instructor: @(string.IsNullOrWhiteSpace(course.Instructor?.Name) ? "N/A" : course.Instructor.Name)
+                            </span>
+                            <div class="card-actions">
+                                <a class="btn btn-outline-secondary btn-sm" href="@($"/courses/details?id={course.Id}")" title="Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm" href="@($"/courses/edit?id={course.Id}")" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a class="btn btn-outline-danger btn-sm" href="@($"/courses/delete?id={course.Id}")" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private ApplicationDbContext context = default!;
+    private List<Course>? Courses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+        Courses = await context.Courses.Include(c => c.Instructor).ToListAsync();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
 }

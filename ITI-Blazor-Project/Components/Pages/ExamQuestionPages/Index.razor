@@ -7,58 +7,122 @@
 
 <PageTitle>Exam Questions</PageTitle>
 
-<h1 class="mb-4">Exam Questions</h1>
+<style>
+    .exam-wrapper {
+        padding: 2rem 1rem;
+        background: linear-gradient(to right, #fef6e4, #e0f7fa);
+        min-height: 100vh;
+    }
 
-<p>
-    <a href="/examquestions/create" class="btn btn-primary">Assign Questions to Exam</a>
-</p>
+    .exam-card {
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.2s ease;
+    }
 
-@if (ExamsWithQuestions == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (!ExamsWithQuestions.Any())
-{
-    <p class="text-muted">No exams found with assigned questions.</p>
-}
-else
-{
-    @foreach (var exam in ExamsWithQuestions)
+        .exam-card:hover {
+            transform: scale(1.01);
+        }
+
+    .exam-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .question-block {
+        background-color: #f8f9fa;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .choice-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+        .choice-item.correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+    .correct-badge {
+        background-color: #198754;
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 0.4rem;
+        font-size: 0.85rem;
+    }
+
+    .assign-btn {
+        margin-bottom: 2rem;
+    }
+</style>
+
+<div class="exam-wrapper">
+    <div class="d-flex align-items-center justify-content-between">
+        <h1 class="mb-4 badge bg-dark text-white-50 text-body p-3" style="font-size:19px;">Exam Questions</h1>
+
+        <p class="assign-btn">
+            <a href="/examquestions/create" class="btn btn-dark">
+                <i class="bi bi-plus-circle"></i> Assign Questions to Exam
+            </a>
+        </p>
+    </div>
+
+    @if (ExamsWithQuestions == null)
     {
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <strong>@exam.Title</strong>
-            </div>
-            <div class="card-body">
-                @if (exam.ExamQuestions.Any())
-                {
-                    @foreach (var eq in exam.ExamQuestions)
+        <p><em>Loading...</em></p>
+    }
+    else if (!ExamsWithQuestions.Any())
+    {
+        <p class="text-muted">No exams found with assigned questions.</p>
+    }
+    else
+    {
+        @foreach (var exam in ExamsWithQuestions)
+        {
+            <div class="card exam-card mb-5">
+                <div class="card-header bg-dark text-white exam-title">
+                    <i class="bi bi-journal-text"></i> @exam.Title
+                </div>
+                <div class="card-body">
+                    @if (exam.ExamQuestions.Any())
                     {
-                        <div class="mb-3">
-                            <h6 class="fw-bold">@eq.Question.Text</h6>
-                            <ul class="list-group">
+                        @foreach (var eq in exam.ExamQuestions)
+                        {
+                            <div class="question-block">
+                                <div class="fw-bold mb-2">Q@((exam.ExamQuestions.ToList().IndexOf(eq) + 1)): @eq.Question.Text</div>
                                 @foreach (var choice in eq.Question.Choices)
                                 {
-                                    <li class="list-group-item d-flex justify-content-between align-items-center @(choice.IsCorrect ? "list-group-item-success" : "")">
+                                    <div class="choice-item @(choice.IsCorrect ? "correct" : "")">
                                         @choice.Text
                                         @if (choice.IsCorrect)
                                         {
-                                            <span class="badge bg-success">✔ Correct</span>
+                                            <span class="correct-badge"><i class="bi bi-check-circle-fill"></i> Correct</span>
                                         }
-                                    </li>
+                                    </div>
                                 }
-                            </ul>
-                        </div>
+                            </div>
+                        }
                     }
-                }
-                else
-                {
-                    <p class="text-muted">No questions assigned.</p>
-                }
+                    else
+                    {
+                        <p class="text-muted">No questions assigned.</p>
+                    }
+                </div>
             </div>
-        </div>
+        }
     }
-}
+</div>
 
 @code {
     private ApplicationDbContext context = default!;

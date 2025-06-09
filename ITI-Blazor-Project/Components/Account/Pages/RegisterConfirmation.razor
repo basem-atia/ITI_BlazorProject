@@ -12,21 +12,23 @@
 
 <PageTitle>Register confirmation</PageTitle>
 
-<h1>Register confirmation</h1>
+<div class="register-confirmation-container">
+    <h1>Register confirmation</h1>
 
-<StatusMessage Message="@statusMessage" />
+    <StatusMessage Message="@statusMessage" />
 
-@if (emailConfirmationLink is not null)
-{
-    <p>
-        This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-        Normally this would be emailed: <a href="@emailConfirmationLink">Click here to confirm your account</a>
-    </p>
-}
-else
-{
-    <p>Please check your email to confirm your account.</p>
-}
+    @if (emailConfirmationLink is not null)
+    {
+        <p class="info-text">
+            This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf" target="_blank" rel="noopener noreferrer">these docs</a> for how to configure a real email sender.<br />
+            Normally this would be emailed: <a href="@emailConfirmationLink">Click here to confirm your account</a>
+        </p>
+    }
+    else
+    {
+        <p class="info-text">Please check your email to confirm your account.</p>
+    }
+</div>
 
 @code {
     private string? emailConfirmationLink;
@@ -46,6 +48,7 @@ else
         if (Email is null)
         {
             RedirectManager.RedirectTo("");
+            return;
         }
 
         var user = await UserManager.FindByEmailAsync(Email);
@@ -66,3 +69,43 @@ else
         }
     }
 }
+
+<style>
+    .register-confirmation-container {
+        max-width: 480px;
+        margin: 4rem auto;
+        padding: 2rem 2.5rem;
+        background-color: #fefefe;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgb(0 0 0 / 0.07);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        color: #333;
+    }
+
+    h1 {
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        font-size: 2.2rem;
+    }
+
+    .info-text {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        margin-top: 1rem;
+        color: #444;
+    }
+
+        .info-text a {
+            color: #0078d7;
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+
+            .info-text a:hover,
+            .info-text a:focus {
+                color: #005a9e;
+                text-decoration: underline;
+            }
+</style>

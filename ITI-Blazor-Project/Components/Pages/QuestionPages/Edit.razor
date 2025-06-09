@@ -1,26 +1,71 @@
 ﻿@page "/questions/edit"
 @using Microsoft.EntityFrameworkCore
 @using ITI_Blazor_Project
-@inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
+@using ITI_Blazor_Project.Data
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Edit</PageTitle>
+<PageTitle>Edit Question</PageTitle>
 
-<h1>Edit</h1>
-<h2>Question</h2>
-<hr />
+<style>
+    .edit-container {
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        min-height: 100vh;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
 
-@if (Question is null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div class="row">
-        <div class="col-md-4">
+    .edit-card {
+        background-color: white;
+        
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .btn-save {
+        background: linear-gradient(to right, #7b2ff7, #f107a3);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+
+        .btn-save:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+
+    .btn-back {
+        font-weight: 600;
+        background-color: #e9ecef;
+        color: #212529;
+        transition: 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background-color: #ced4da;
+            transform: scale(1.03);
+        }
+</style>
+
+<div class="edit-container">
+    <div class="edit-card">
+        <h2 class="mb-4 text-center">Edit Question</h2>
+
+        @if (Question is null || Courses is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
             <EditForm Model="Question" OnValidSubmit="UpdateQuestion">
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert" />
+                <ValidationSummary class="text-danger" />
 
                 <div class="mb-3">
                     <label for="text" class="form-label">Text:</label>
@@ -29,61 +74,57 @@ else
                 </div>
 
                 <div class="mb-3">
-                    <label for="courseid" class="form-label">Course ID (GUID):</label>
-                    <InputText id="courseid" @bind-Value="CourseIdString" class="form-control" />
-                    <ValidationMessage For="() => CourseIdString" class="text-danger" />
+                    <label for="courseid" class="form-label">Course:</label>
+                    <InputSelect id="courseid" @bind-Value="Question.CourseId" class="form-select">
+                        <option value="">-- Select Course --</option>
+                        @foreach (var course in Courses)
+                        {
+                            <option value="@course.Id">@course.Title</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="() => Question.CourseId" class="text-danger" />
                 </div>
 
-                @if (!IsCourseIdValid)
-                {
-                    <div class="text-danger mb-3">Course ID must be a valid GUID.</div>
-                }
-
-                <button type="submit" class="btn btn-primary" disabled="@( !IsCourseIdValid )">Save</button>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/questions" class="btn btn-back">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-save px-4">
+                        <i class="bi bi-save me-1"></i> Save
+                    </button>
+                </div>
             </EditForm>
-        </div>
+        }
     </div>
-}
-
-<div>
-    <a href="/questions">Back to List</a>
 </div>
+
+
 
 @code {
     [SupplyParameterFromQuery]
     private Guid Id { get; set; }
 
     private Question? Question { get; set; }
-    private string CourseIdString { get; set; } = string.Empty;
-    private bool IsCourseIdValid { get; set; } = true;
+    private List<Course> Courses { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
+
         Question = await context.Questions.FirstOrDefaultAsync(q => q.Id == Id);
+        Courses = await context.Courses.ToListAsync();
 
         if (Question is null)
         {
             NavigationManager.NavigateTo("notfound");
             return;
         }
-
-        CourseIdString = Question.CourseId.ToString();
     }
 
     private async Task UpdateQuestion()
     {
-        if (!Guid.TryParse(CourseIdString, out var parsedCourseId))
-        {
-            IsCourseIdValid = false;
-            return;
-        }
-
-        IsCourseIdValid = true;
-        Question!.CourseId = parsedCourseId;
-
         using var context = DbFactory.CreateDbContext();
-        context.Attach(Question).State = EntityState.Modified;
+        context.Attach(Question!).State = EntityState.Modified;
 
         try
         {
@@ -91,7 +132,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!QuestionExists(Question.Id))
+            if (!QuestionExists(Question!.Id))
             {
                 NavigationManager.NavigateTo("notfound");
                 return;
@@ -111,3 +152,4 @@ else
         return context.Questions.Any(e => e.Id == id);
     }
 }
+

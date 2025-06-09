@@ -8,73 +8,185 @@
 
 <PageTitle>Exams</PageTitle>
 
-<h1 class="pt-5 pb-5">Exams</h1>
+<style>
+    .page-bg {
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        min-height: 100vh;
+    }
 
-<p>
-    <a href="exams/create">Create New</a>
-</p>
+    .exams-header {
+        margin-left: 3rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
 
-@* <QuickGrid Class="table" Items="context.Exams">
-    <PropertyColumn Property="exam => exam.Title" />
-    <PropertyColumn Property="exam => exam.Date" />
-    <PropertyColumn Property="exam => exam.Duration" />
-    <PropertyColumn Property="exam => exam.InstructorId" />
+    .exams-actions {
+        margin-right: 3rem;
+    }
 
-    <TemplateColumn Context="exam">
-        <a href="@($"exams/edit?id={exam.Id}")">Edit</a> |
-        <a href="@($"exams/details?id={exam.Id}")">Details</a> |
-        <a href="@($"exams/delete?id={exam.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid> *@
+    .card-exam {
+        border-radius: 16px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fff;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
-@if (Exams is null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (!Exams.Any())
-{
-    <p>No Exams found.</p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Duration</th>
-                <th>Instructor Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+        .card-exam:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+        }
+
+    .card-body-exam {
+        padding: 1.75rem 2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-title-exam {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #4361ee;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        user-select: none;
+    }
+
+    .exam-info {
+        color: #555;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        flex-grow: 1;
+    }
+
+    .instructor-badge {
+        background-color: #d0e7ff;
+        color: #1a3d7c;
+        padding: 0.35rem 0.9rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        user-select: none;
+        width: fit-content;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 1px 3px rgba(67, 97, 238, 0.3);
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn-outline-secondary,
+    .btn-outline-primary,
+    .btn-outline-danger {
+        flex: 1;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        transition: background-color 0.25s ease, color 0.25s ease;
+        user-select: none;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #4361ee;
+            color: #fff;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+    .exam-col {
+        margin-bottom: 2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+</style>
+
+<div class="page-bg py-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="exams-header badge bg-light shadow-sm rounded-pill">
+            <i class="bi bi-journal-check text-primary me-2"></i>Exams
+        </h1>
+        <p class="exams-actions">
+            <a class="btn btn-primary" href="/exams/create">
+                <i class="bi bi-plus-circle me-1"></i> Create New Exam
+            </a>
+        </p>
+    </div>
+
+    @if (Exams is null)
+    {
+        <p class="text-center"><em>Loading...</em></p>
+    }
+    else if (!Exams.Any())
+    {
+        <p class="text-center text-muted">No exams found.</p>
+    }
+    else
+    {
+        <div class="row justify-content-center">
             @foreach (var exam in Exams)
             {
-                <tr>
-                    <td>@exam.Title</td>
-                    <td>@exam.Date?.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@exam.Duration.ToString(@"hh\:mm")</td>
-                    <td>@exam.Instructor?.Name</td>
-                    <td>
-                        <a href="@($"/exams/details?id={exam.Id}")">Details</a> |
-                        <a href="@($"/exams/edit?id={exam.Id}")">Edit</a> |
-                        <a href="@($"/exams/delete?id={exam.Id}")">Delete</a>
-                    </td>
-                </tr>
+                <div class="col-md-6 col-lg-5 exam-col">
+                    <div class="card card-exam h-100">
+                        <div class="card-body card-body-exam">
+                            <h5 class="card-title-exam">
+                                <i class="bi bi-journal-text"></i> @exam.Title
+                            </h5>
+                            <p class="exam-info">
+                                <strong>Date:</strong> @exam.Date?.ToString("yyyy-MM-dd HH:mm")
+                            </p>
+                            <p class="exam-info">
+                                <strong>Duration:</strong> @exam.Duration.ToString(@"hh\:mm")
+                            </p>
+                            <span class="instructor-badge">
+                                Instructor: @(string.IsNullOrWhiteSpace(exam.Instructor?.Name) ? "N/A" : exam.Instructor.Name)
+                            </span>
+                            <div class="card-actions">
+                                <a class="btn btn-outline-secondary btn-sm" href="@($"/exams/details?id={exam.Id}")" title="Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm" href="@($"/exams/edit?id={exam.Id}")" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a class="btn btn-outline-danger btn-sm" href="@($"/exams/delete?id={exam.Id}")" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
-}
-
+        </div>
+    }
+</div>
 
 @code {
     private ApplicationDbContext context = default!;
-    private List<Exam>? Exams = new List<Exam>();
+    private List<Exam>? Exams = new();
 
     protected override async Task OnInitializedAsync()
     {
         context = DbFactory.CreateDbContext();
-        Exams = await context.Exams.Include(e=>e.Instructor).ToListAsync();
+        Exams = await context.Exams.Include(e => e.Instructor).ToListAsync();
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();

@@ -1,0 +1,172 @@
+﻿@page "/Student/Courses"
+@using ITI_Blazor_Project.Data
+@using ITI_Blazor_Project
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager Navigation
+@inject ApplicationDbContext DbContext
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthProvider
+
+<style>
+    .course-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease-in-out;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .course-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #0d6efd;
+    }
+
+    .course-description {
+        font-size: 0.95rem;
+        color: #495057;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+    }
+
+    .enroll-btn {
+        width: 100%;
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-weight: 600;
+    }
+
+    .page-container {
+        padding: 2rem;
+        background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+        min-height: 100vh;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #343a40;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+</style>
+
+<div class="page-container">
+    <h2 class="section-title">Available Courses</h2>
+
+    @if (courses == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else if (!courses.Any())
+    {
+        <p><em>No courses available at the moment.</em></p>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var course in courses)
+            {
+                <div class="col">
+                    <div class="course-card">
+                        <div>
+                            <div class="course-title">@course.Title</div>
+                            <div class="course-description">@course.Description</div>
+                        </div>
+                        <button class="btn btn-primary enroll-btn"
+                                disabled="@enrolledCourseIds.Contains(course.Id)"
+                                @onclick="async () => await EnrollInCourse(course.Id)">
+                            @(enrolledCourseIds.Contains(course.Id) ? "Enrolled" : "Enroll")
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-info mt-4 text-center">@message</div>
+    }
+</div>
+
+@code {
+    private List<Course> courses = new();
+    private Guid studentId;
+    private HashSet<Guid> enrolledCourseIds = new();
+    private string message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User);
+
+        if (user == null)
+        {
+            Navigation.NavigateTo("/Account/Login");
+            return;
+        }
+
+        var student = await DbContext.Students.FirstOrDefaultAsync(s => s.Email == user.Email);
+        if (student == null)
+        {
+            student = new Student
+            {
+                Id = Guid.NewGuid(),
+                Email = user.Email,
+            };
+
+            DbContext.Students.Add(student);
+            await DbContext.SaveChangesAsync();
+        }
+
+        studentId = student.Id;
+
+        courses = await DbContext.Courses.ToListAsync();
+
+        enrolledCourseIds = await DbContext.StudentCourses
+            .Where(sc => sc.StudentId == studentId)
+            .Select(sc => sc.CourseId)
+            .ToHashSetAsync();
+    }
+
+    private async Task EnrollInCourse(Guid courseId)
+    {
+        try
+        {
+            if (!enrolledCourseIds.Contains(courseId))
+            {
+                var enrollment = new StudentCourse
+                {
+                    StudentId = studentId,
+                    CourseId = courseId
+                };
+
+                DbContext.StudentCourses.Add(enrollment);
+                await DbContext.SaveChangesAsync();
+
+                enrolledCourseIds.Add(courseId);
+                message = "Successfully enrolled in the course!";
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"Error enrolling in course: {ex.Message}";
+            if (ex.InnerException != null)
+                message += $" - Details: {ex.InnerException.Message}";
+
+            StateHasChanged();
+        }
+    }
+}

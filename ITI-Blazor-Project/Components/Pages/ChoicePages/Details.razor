@@ -4,29 +4,117 @@
 @inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Details</PageTitle>
+<PageTitle>Choice Details</PageTitle>
 
-<h1 class="pt-5 pb-5">Details</h1>
+<style>
+    .details-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 90vh;
+        background: linear-gradient(135deg, #fcd5ce, #cdb4db);
+        padding: 2rem 1rem;
+    }
 
-<div>
-    <h2>Choice</h2>
-    <hr />
+    .details-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        padding: 3rem 2.5rem;
+        max-width: 650px;
+        width: 100%;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .details-card:hover {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+        }
+
+    .details-title {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2.2rem;
+        color: #343a40;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .details-label {
+        font-weight: 500;
+        background-color: #495057;
+        color: white;
+        padding: 0.4rem 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .details-value {
+        font-size: 1.1rem;
+        color: #212529;
+    }
+
+    .btn-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2.5rem;
+    }
+
+    .btn {
+        min-width: 120px;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+</style>
+
+<div class="details-wrapper">
     @if (choice is null)
     {
         <p><em>Loading...</em></p>
     }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Text</dt>
-            <dd class="col-sm-10">@choice.Text</dd>
-            <dt class="col-sm-2">IsCorrect</dt>
-            <dd class="col-sm-10">@choice.IsCorrect</dd>
-            <dt class="col-sm-2">QuestionId</dt>
-            <dd class="col-sm-10">@choice.Question?.Text</dd>
-        </dl>
-        <div>
-            <a href="@($"/choices/edit?id={choice.Id}")">Edit</a> |
-            <a href="@($"/choices")">Back to List</a>
+    else
+    {
+        <div class="details-card">
+            <div class="details-title">
+                <div class="badge bg-dark text-white">
+                    <i class="bi bi-check2-square"></i>
+                    <span>Choice Details</span>
+                </div>
+            </div>
+            <hr class="mb-4" />
+            <dl class="row gy-3">
+                <dt class="col-sm-4">
+                    <span class="details-label w-75"><i class="bi bi-chat-left-text"></i> Text</span>
+                </dt>
+                <dd class="col-sm-8 details-value ps-5">@choice.Text</dd>
+
+                <dt class="col-sm-4">
+                    <span class="details-label w-75"><i class="bi bi-check-circle"></i> Is Correct</span>
+                </dt>
+                <dd class="col-sm-8 details-value ps-5">
+                    @(choice.IsCorrect ? "✔️ True" : "❌ False")
+                </dd>
+
+                <dt class="col-sm-4">
+                    <span class="details-label w-75"><i class="bi bi-question-circle"></i> Question</span>
+                </dt>
+                <dd class="col-sm-8 details-value ps-5">@choice.Question?.Text</dd>
+            </dl>
+
+            <div class="btn-actions">
+                <a class="btn btn-dark" href="@($"/choices/edit?id={choice.Id}")">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+                <a class="btn btn-danger" href="/choices">
+                    <i class="bi bi-arrow-left-circle"></i> Back
+                </a>
+            </div>
         </div>
     }
 </div>
@@ -40,7 +128,7 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        choice = await context.Choices.Include(c=>c.Question).FirstOrDefaultAsync(m => m.Id == Id);
+        choice = await context.Choices.Include(c => c.Question).FirstOrDefaultAsync(m => m.Id == Id);
 
         if (choice is null)
         {

@@ -215,6 +215,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/CoursePages/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3Vyc2VQYWdlc1xDcmVhdGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/CoursePages/Delete.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3Vyc2VQYWdlc1xEZWxldGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/CoursePages/Details.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3Vyc2VQYWdlc1xEZXRhaWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/CoursePages/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3Vyc2VQYWdlc1xFZGl0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/CoursePages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3Vyc2VQYWdlc1xJbmRleC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -267,6 +287,30 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xJbnN0cnVjdG9ySG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/QuestionPages/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xRdWVzdGlvblBhZ2VzXENyZWF0ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/QuestionPages/Delete.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xRdWVzdGlvblBhZ2VzXERlbGV0ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/QuestionPages/Details.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xRdWVzdGlvblBhZ2VzXERldGFpbHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/QuestionPages/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xRdWVzdGlvblBhZ2VzXEVkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/QuestionPages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xRdWVzdGlvblBhZ2VzXEluZGV4LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/StudentCoursePages/CourseExam.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50Q291cnNlUGFnZXNcQ291cnNlRXhhbS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/StudentCoursePages/Create.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50Q291cnNlUGFnZXNcQ3JlYXRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -283,8 +327,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50Q291cnNlUGFnZXNcRWRpdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/StudentCoursePages/EnrolledCourses.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50Q291cnNlUGFnZXNcRW5yb2xsZWRDb3Vyc2VzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/StudentCoursePages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50Q291cnNlUGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/StudentCoursePages/StudentCoursePage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50Q291cnNlUGFnZXNcU3R1ZGVudENvdXJzZVBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/StudentCoursePages/TakeExam.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdHVkZW50Q291cnNlUGFnZXNcVGFrZUV4YW0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/iti/blazor/day 3/ITI-Blazor-Project/ITI-Blazor-Project/ITI-Blazor-Project/Components/Pages/StudentExamPages/Create.razor]

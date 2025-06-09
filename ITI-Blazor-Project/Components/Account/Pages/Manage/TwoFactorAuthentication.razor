@@ -11,64 +11,167 @@
 
 <PageTitle>Two-factor authentication (2FA)</PageTitle>
 
-<StatusMessage />
-<h3>Two-factor authentication (2FA)</h3>
-@if (canTrack)
-{
-    if (is2faEnabled)
-    {
-        if (recoveryCodesLeft == 0)
-        {
-            <div class="alert alert-danger">
-                <strong>You have no recovery codes left.</strong>
-                <p>You must <a href="Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
-            </div>
-        }
-        else if (recoveryCodesLeft == 1)
-        {
-            <div class="alert alert-danger">
-                <strong>You have 1 recovery code left.</strong>
-                <p>You can <a href="Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
-            </div>
-        }
-        else if (recoveryCodesLeft <= 3)
-        {
-            <div class="alert alert-warning">
-                <strong>You have @recoveryCodesLeft recovery codes left.</strong>
-                <p>You should <a href="Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
-            </div>
-        }
-
-        if (isMachineRemembered)
-        {
-            <form style="display: inline-block" @formname="forget-browser" @onsubmit="OnSubmitForgetBrowserAsync" method="post">
-                <AntiforgeryToken />
-                <button type="submit" class="btn btn-primary">Forget this browser</button>
-            </form>
-        }
-
-        <a href="Account/Manage/Disable2fa" class="btn btn-primary">Disable 2FA</a>
-        <a href="Account/Manage/GenerateRecoveryCodes" class="btn btn-primary">Reset recovery codes</a>
+<style>
+    .page-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        padding: 3rem 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #374151;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    <h4>Authenticator app</h4>
-    @if (!hasAuthenticator)
-    {
-        <a href="Account/Manage/EnableAuthenticator" class="btn btn-primary">Add authenticator app</a>
+    h3 {
+        color: white;
+        font-weight: 700;
+        font-size: 2rem;
+        letter-spacing: 0.07em;
+        margin-bottom: 2rem;
+        text-align: center;
     }
-    else
-    {
-        <a href="Account/Manage/EnableAuthenticator" class="btn btn-primary">Set up authenticator app</a>
-        <a href="Account/Manage/ResetAuthenticator" class="btn btn-primary">Reset authenticator app</a>
+
+    h4 {
+        margin-top: 2.5rem;
+        color: #1f2937; /* gray-800 */
+        font-weight: 700;
     }
-}
-else
-{
-    <div class="alert alert-danger">
-        <strong>Privacy and cookie policy have not been accepted.</strong>
-        <p>You must accept the policy before you can enable two factor authentication.</p>
+
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 520px;
+        width: 100%;
+        padding: 2rem 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(12px);
+    }
+
+    .alert-danger, .alert-warning {
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+    }
+
+    .alert-danger {
+        background-color: #fee2e2; /* red-100 */
+        color: #b91c1c; /* red-700 */
+        border: 1px solid #fca5a5; /* red-400 */
+    }
+
+    .alert-warning {
+        background-color: #fef3c7; /* yellow-100 */
+        color: #92400e; /* yellow-800 */
+        border: 1px solid #fde68a; /* yellow-300 */
+    }
+
+    a {
+        color: #43cea2;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: #185a9d;
+            text-decoration: underline;
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        border: none;
+        border-radius: 14px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 700;
+        box-shadow: 0 6px 18px rgba(67, 206, 162, 0.4);
+        color: white;
+        cursor: pointer;
+        user-select: none;
+        display: inline-block;
+        margin-right: 0.75rem;
+        margin-top: 0.5rem;
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        font-size: 1rem;
+    }
+
+        .btn-primary:hover {
+            box-shadow: 0 12px 28px rgba(67, 206, 162, 0.6);
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+    form[style*="inline-block"] {
+        display: inline-block;
+        margin-right: 0.75rem;
+        margin-top: 0.5rem;
+    }
+</style>
+
+<div class="page-container">
+    <h3>Two-factor authentication (2FA)</h3>
+
+    <div class="card">
+        @if (canTrack)
+        {
+            if (is2faEnabled)
+            {
+                if (recoveryCodesLeft == 0)
+                {
+                    <div class="alert-danger" role="alert">
+                        <strong>You have no recovery codes left.</strong>
+                        <p>You must <a href="Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
+                    </div>
+                }
+                else if (recoveryCodesLeft == 1)
+                {
+                    <div class="alert-danger" role="alert">
+                        <strong>You have 1 recovery code left.</strong>
+                        <p>You can <a href="Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
+                    </div>
+                }
+                else if (recoveryCodesLeft <= 3)
+                {
+                    <div class="alert-warning" role="alert">
+                        <strong>You have @recoveryCodesLeft recovery codes left.</strong>
+                        <p>You should <a href="Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
+                    </div>
+                }
+
+                @if (isMachineRemembered)
+                {
+                    <form style="display: inline-block" @formname="forget-browser" @onsubmit="OnSubmitForgetBrowserAsync" method="post">
+                        <AntiforgeryToken />
+                        <button type="submit" class="btn-primary">Forget this browser</button>
+                    </form>
+                }
+
+                <a href="Account/Manage/Disable2fa" class="btn-primary">Disable 2FA</a>
+                <a href="Account/Manage/GenerateRecoveryCodes" class="btn-primary">Reset recovery codes</a>
+            }
+
+            <h4>Authenticator app</h4>
+            @if (!hasAuthenticator)
+            {
+                <a href="Account/Manage/EnableAuthenticator" class="btn-primary">Add authenticator app</a>
+            }
+            else
+            {
+                <a href="Account/Manage/EnableAuthenticator" class="btn-primary">Set up authenticator app</a>
+                <a href="Account/Manage/ResetAuthenticator" class="btn-primary">Reset authenticator app</a>
+            }
+        }
+        else
+        {
+            <div class="alert-danger" role="alert">
+                <strong>Privacy and cookie policy have not been accepted.</strong>
+                <p>You must accept the policy before you can enable two factor authentication.</p>
+            </div>
+        }
     </div>
-}
+</div>
 
 @code {
     private bool canTrack;

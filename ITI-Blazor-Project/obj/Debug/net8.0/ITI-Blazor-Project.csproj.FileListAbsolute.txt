@@ -290,10 +290,11 @@ E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\staticwebassets.build.json.cache
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\staticwebassets.development.json
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\ITI-Blaz.578D31F1.Up2Date
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\ITI-Blazor-Project.dll
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\refint\ITI-Blazor-Project.dll
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\ITI-Blazor-Project.pdb
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\ITI-Blazor-Project.genruntimeconfig.cache
 E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\ref\ITI-Blazor-Project.dll
+E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\ITI-Blazor-Project.sourcelink.json
+E:\iti\blazor\day 3\ITI-Blazor-Project\ITI-Blazor-Project\ITI-Blazor-Project\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

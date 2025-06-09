@@ -11,24 +11,114 @@
 
 <PageTitle>Profile</PageTitle>
 
-<h3>Profile</h3>
-<StatusMessage />
+<style>
+    /* Page container with gradient background and centering */
+    .page-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        padding: 3rem 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #374151;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-<div class="row">
-    <div class="col-md-6">
-        <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post">
+    /* Main header */
+    h1 {
+        color: white;
+        font-weight: 700;
+        font-size: 2.5rem;
+        letter-spacing: 0.07em;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    /* Card style matching exam questions page */
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+        padding: 2rem 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(12px);
+        transition: box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Form floating inputs consistent height and padding */
+    .form-floating > input.form-control,
+    .form-floating > .form-control {
+        height: 3.6rem;
+        font-size: 1rem;
+        padding: 1rem 1rem 0.25rem;
+    }
+
+    /* Floating label color */
+    label {
+        color: #6b7280; /* gray-500 */
+    }
+
+    /* Save button styling */
+    .btn-primary {
+        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        border: none;
+        border-radius: 14px;
+        padding: 0.75rem 1.75rem;
+        font-weight: 700;
+        box-shadow: 0 6px 18px rgba(67, 206, 162, 0.4);
+        color: white;
+        cursor: pointer;
+        user-select: none;
+        display: inline-flex;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+        .btn-primary:hover {
+            box-shadow: 0 12px 28px rgba(67, 206, 162, 0.6);
+            transform: translateY(-3px);
+            color: white;
+            text-decoration: none;
+        }
+
+    /* Validation messages */
+    .text-danger {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="page-container">
+    <h1>Profile</h1>
+
+    <StatusMessage />
+
+    <div class="card">
+        <EditForm Model="Input" OnValidSubmit="OnValidSubmitAsync" class="needs-validation" novalidate>
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <input type="text" value="@username" class="form-control" placeholder="Please choose your username." disabled />
-                <label for="username" class="form-label">Username</label>
+
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" placeholder="Username" value="@username" disabled />
+                <label>Username</label>
             </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
-                <label for="phone-number" class="form-label">Phone number</label>
+
+            <div class="form-floating mb-4">
+                <InputText @bind-Value="Input.PhoneNumber" class="form-control" placeholder="Phone number" />
+                <label>Phone number</label>
                 <ValidationMessage For="() => Input.PhoneNumber" class="text-danger" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+
+            <button type="submit" class="btn-primary">Save</button>
         </EditForm>
     </div>
 </div>
@@ -61,6 +151,7 @@
             if (!setPhoneResult.Succeeded)
             {
                 RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to set phone number.", HttpContext);
+                return;
             }
         }
 

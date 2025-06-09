@@ -4,32 +4,82 @@
 @inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Create Course</PageTitle>
 
-<h1>Create</h1>
+<style>
+    .form-container {
+        background: linear-gradient(135deg, #a8dadc, #cdb4db);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
 
-<h2>Course</h2>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    .custom-card {
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #5f27cd;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .btn-custom {
+        
+        border: none;
+        color: white;
+        font-weight: 600;
+    }
+
+        .btn-custom:hover {
+            opacity: 0.9;
+        }
+
+    .btn-cancel {
+        background-color: #dee2e6;
+        font-weight: 600;
+    }
+
+        .btn-cancel:hover {
+            background-color: #ced4da;
+        }
+</style>
+
+<div class="form-container">
+    <div class="custom-card">
+        <div class="form-title">Create New Course</div>
+
         <EditForm Model="Course" OnValidSubmit="AddCourse">
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
+            <ValidationSummary class="text-danger mb-3" />
 
             <div class="mb-3">
-                <label for="title" class="form-label">Title:</label>
+                <label for="title" class="form-label">Course Title</label>
                 <InputText id="title" @bind-Value="Course.Title" class="form-control" />
                 <ValidationMessage For="() => Course.Title" class="text-danger" />
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Description:</label>
+                <label for="description" class="form-label">Course Description</label>
                 <InputText id="description" @bind-Value="Course.Description" class="form-control" />
                 <ValidationMessage For="() => Course.Description" class="text-danger" />
             </div>
 
             <div class="mb-3">
-                <label for="instructor" class="form-label">Instructor:</label>
+                <label for="instructor" class="form-label">Instructor</label>
                 <InputSelect id="instructor" @bind-Value="Course.InstructorId" class="form-select">
                     <option value="">-- Select Instructor --</option>
                     @foreach (var instructor in Instructors)
@@ -40,13 +90,16 @@
                 <ValidationMessage For="() => Course.InstructorId" class="text-danger" />
             </div>
 
-            <button type="submit" class="btn btn-primary">Create</button>
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/courses" class="btn btn-cancel px-4">
+                    <i class="bi bi-arrow-left me-1"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-dark px-4">
+                    <i class="bi bi-check-circle me-1"></i> Create Course
+                </button>
+            </div>
         </EditForm>
     </div>
-</div>
-
-<div>
-    <a href="/courses">Back to List</a>
 </div>
 
 @code {

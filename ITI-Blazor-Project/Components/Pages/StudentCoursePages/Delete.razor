@@ -1,4 +1,4 @@
-﻿@page "/studentcourses/delete"
+﻿@* @page "/studentcourses/delete"
 @using Microsoft.EntityFrameworkCore
 @using ITI_Blazor_Project
 @inject IDbContextFactory<ITI_Blazor_Project.Data.ApplicationDbContext> DbFactory
@@ -66,4 +66,4 @@
         await context.SaveChangesAsync();
         NavigationManager.NavigateTo("/studentcourses");
     }
-}
+} *@

@@ -1,4 +1,4 @@
-﻿@page "/studentcourses/edit"
+﻿@* @page "/studentcourses/edit"
 @using ITI_Blazor_Project.Data
 @using Microsoft.EntityFrameworkCore
 @using ITI_Blazor_Project
@@ -112,4 +112,4 @@ else
         using var context = DbFactory.CreateDbContext();
         return context.StudentCourses.Any(e => e.StudentId == studentid);
     }
-}
+} *@
